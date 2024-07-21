@@ -1,2 +1,8 @@
-# project_template
-# Make sure to fill out the README with the information specified in the project description!
+# CPSC 304 Garden App - Group 36
+
+## Group Members
+- Poppy Li
+- Jessie Zhou
+- Trevor Dang
+
+
