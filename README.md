@@ -25,3 +25,7 @@ will provide users the ability to view and update data accordingly on the applic
 - Everything else from timeline
 
 ## FE Drawing
+![](./assets/garden_app_fe_diagram.png)
+
+## ER Diagram
+![](./assets/CPSC%20304_%20Milstone%20#1%20ERD.png)
