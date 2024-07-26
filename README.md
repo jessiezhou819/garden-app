@@ -28,4 +28,4 @@ will provide users the ability to view and update data accordingly on the applic
 ![](./assets/garden_app_fe_diagram.png)
 
 ## ER Diagram
-![](./assets/CPSC%20304_%20Milstone%20#1%20ERD.png)
+![](./assets/CPSC_304_Milstone_1_ERD.png)
