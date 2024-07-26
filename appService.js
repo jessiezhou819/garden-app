@@ -76,6 +76,15 @@ async function testOracleConnection() {
     });
 }
 
+async function fetchHousePeopleFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT * FROM HousePeople');
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 async function fetchDemotableFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute('SELECT * FROM DEMOTABLE');
@@ -158,6 +167,7 @@ async function countDemotable() {
 
 module.exports = {
     testOracleConnection,
+    fetchHousePeopleFromDb,
     fetchDemotableFromDb,
     initiateDemotable, 
     insertDemotable, 

@@ -36,6 +36,31 @@ async function checkDbConnection() {
     });
 }
 
+// Fetches data from the housepeople table and displays it.
+async function fetchAndDisplayHousePeople() {
+    const tableElement = document.getElementById('housepeople');
+    const tableBody = tableElement.querySelector('tbody');
+
+    const response = await fetch('/housepeople', {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+    const housepeopleContent = responseData.data;
+
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    housepeopleContent.forEach(user => {
+        const row = tableBody.insertRow();
+        user.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+}
+
 // Fetches data from the demotable and displays it.
 async function fetchAndDisplayUsers() {
     const tableElement = document.getElementById('demotable');
@@ -204,4 +229,5 @@ window.onload = function() {
 // You can invoke this after any table-modifying operation to keep consistency.
 function fetchTableData() {
     fetchAndDisplayUsers();
+    fetchAndDisplayHousePeople();
 }
