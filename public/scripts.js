@@ -28,14 +28,13 @@ async function checkDbConnection() {
     statusElem.style.display = 'inline';
 
     response.text()
-    .then((text) => {
-        statusElem.textContent = text;
-    })
-    .catch((error) => {
-        statusElem.textContent = 'connection timed out';  // Adjust error handling if required.
-    });
+        .then((text) => {
+            statusElem.textContent = text;
+        })
+        .catch((error) => {
+            statusElem.textContent = 'connection timed out';  // Adjust error handling if required.
+        });
 }
-
 // Fetches data from the housepeople table and displays it.
 async function fetchAndDisplayHousePeople() {
     const tableElement = document.getElementById('housepeople');
@@ -61,6 +60,48 @@ async function fetchAndDisplayHousePeople() {
     });
 }
 
+// Handles form submission for inserting a new user.
+document.getElementById('insertForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    // Get form values
+    const username = document.getElementById('username').value;
+    const pass = document.getElementById('password').value;
+    const fullName = document.getElementById('fullName').value;
+    const gender = document.getElementById('gender').value;
+    const gardenRole = document.getElementById('gardenRole').value;
+    const yearsOfExp = document.getElementById('yearsOfExp').value;
+
+    // Send POST request to insert new user
+    const response = await fetch('/insertHousePerson', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: username,
+            password: pass,
+            fullName: fullName,
+            gender: gender,
+            gardenRole: gardenRole,
+            yearsOfExp: yearsOfExp
+        })
+    });
+
+    if (response.ok) {
+        // Refresh the table to show the new user
+        fetchAndDisplayHousePeople();
+    } else {
+        alert('Failed to insert user');
+    }
+
+    // Clear the form
+    document.getElementById('insertForm').reset();
+});
+
+// Initial fetch and display of house people
+fetchAndDisplayHousePeople();
+
 // Fetches data from the demotable and displays it.
 async function fetchAndDisplayUsers() {
     const tableElement = document.getElementById('demotable');
@@ -79,6 +120,31 @@ async function fetchAndDisplayUsers() {
     }
 
     demotableContent.forEach(user => {
+        const row = tableBody.insertRow();
+        user.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+}
+
+// Fetches data from the housepeople table and displays it.
+async function fetchAndDisplayPlant() {
+    const tableElement = document.getElementById('plant');
+    const tableBody = tableElement.querySelector('tbody');
+
+    const response = await fetch('/plant', {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+    const housepeopleContent = responseData.data;
+
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    housepeopleContent.forEach(user => {
         const row = tableBody.insertRow();
         user.forEach((field, index) => {
             const cell = row.insertCell(index);
@@ -167,7 +233,7 @@ async function updateNameDemotable(event) {
 // Deletes record from demotable.
 async function deleteDemotable(event) {
     event.preventDefault();
-    
+
     const idValue = document.getElementById('removeId').value;
     const nameValue = document.getElementById('removeName').value;
 
@@ -215,7 +281,7 @@ async function countDemotable() {
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
 // Add or remove event listeners based on the desired functionalities.
-window.onload = function() {
+window.onload = function () {
     checkDbConnection();
     fetchTableData();
     document.getElementById("resetDemotable").addEventListener("click", resetDemotable);
@@ -230,4 +296,5 @@ window.onload = function() {
 function fetchTableData() {
     fetchAndDisplayUsers();
     fetchAndDisplayHousePeople();
+    fetchAndDisplayPlant();
 }
