@@ -44,6 +44,100 @@
 
     <br><hr><br> <!-- ========================================================================= -->
 
+    <div style="display:flex; flex-direction:row; justify-content:space-evenly; flex-wrap:wrap;">
+        <div>
+            <h4> Insert Value into Watering </h4>
+            <form id="insertWatering">
+                wateringId: <input type="number" id="insertwateringId" placeholder="Enter wateringId" required> <br><br>
+                pH: <input type="number" step=".01" id="insertpH" placeholder="Enter pH" required> <br><br>
+                temperature: <input type="number" step=".01" id="inserttemperature" placeholder="Enter temperature" required> <br><br>
+                wateringDate: <input type="date" id="insertwateringDate" placeholder="Enter wateringDate" required> <br><br>
+                amount: <input type="number" id="insertamount" placeholder="Enter amount" required> <br><br>
+                plantId: <input type="number" id="insertplantId" placeholder="Enter plantId" required> <br><br>
+    
+                <button type="submit"> insert </button> <br>
+            </form>
+            <div id="insertWateringResultMsg"></div>
+        </div>
+        <div>
+            <h4> Delete Value from Watering R1 </h4>
+            <form id="deleteWateringR1">
+                wateringDate: <input type="date" id="deletewateringDate" placeholder="Enter wateringDate" required> <br><br>
+                temperature: <input type="number" step=".01" id="deletetemperature" placeholder="Enter temperature" required> <br><br>
+                pH: <input type="number" step=".01" id="deletepH" placeholder="Enter pH" required> <br><br>
+
+                <button type="submit"> delete </button> <br>
+            </form>
+            <div id="deleteWateringR1ResultMsg"></div>
+        </div>
+        <div>
+            <h4> Update Tuple in WateringR2 </h4>
+            <form id="updateWateringR2">
+                wateringId: <input type="number" id="updatewateringId" placeholder="Enter wateringId" required> <br><br>
+                wateringDate: <input type="date" id="updatewateringDate" placeholder="Enter wateringDate"> <br><br>
+                temperature: <input type="number" step=".01" id="updatetemperature" placeholder="Enter temperature"> <br><br>
+                pH: <input type="number" step=".01" id="updatepH" placeholder="Enter pH"> <br><br>
+                plantId: <input type="number" id="updateplantId" placeholder="Enter plantId"> <br><br>
+
+                <button type="submit"> update </button> <br>
+            </form>
+            <div id="updateWateringR2ResultMsg"></div>
+        </div>
+    </div>
+
+    <div style="display:flex; flex-direction:row; justify-content:space-evenly; flex-wrap:wrap;">
+        <div>
+            <h2>Watering R1 and R2 Joined Entries</h2>
+            <table id="watering" border="1">
+                <thead>
+                    <tr>
+                        <th>wateringId</th>
+                        <th>pH</th>
+                        <th>temperature</th>
+                        <th>date</th>
+                        <th>amount</th>
+                        <th>plantId</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <h2>Watering R1 Entries</h2>
+            <table id="wateringR1" border="1">
+                <thead>
+                    <tr>
+                        <th>wateringDate</th>
+                        <th>temperature</th>
+                        <th>pH</th>
+                        <th>amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <h2>Watering R2 Entries</h2>
+            <table id="wateringR2" border="1">
+                <thead>
+                    <tr>
+                        <th>wateringId</th>
+                        <th>wateringDate</th>
+                        <th>temperature</th>
+                        <th>pH</th>
+                        <th>plantId</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <br><hr><br> <!-- ========================================================================= -->
+
     <!-- Show 'Demotable'. 
         Data will be fetched and inserted here dynamically using JavaScript. -->
     <h2>Show Demotable</h2>

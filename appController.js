@@ -20,6 +20,56 @@ router.get('/housepeople', async (req, res) => {
     res.json({data: tableContent});
 });
 
+/**
+ * ALL API ENDPOINTS RELATED TO WATERING
+ */
+
+// For fetching watering entries from R2 and R1
+router.get('/watering', async(req, res) => {
+    const tableContent = await appService.fetchWateringFromDb();
+    res.json({data: tableContent});
+});
+// For fetching watering entries from R2
+router.get('/wateringR2', async(req, res) => {
+    const tableContent = await appService.fetchWateringR2FromDb();
+    res.json({data: tableContent});
+});
+// For fetching watering entries from R1
+router.get('/wateringR1', async(req, res) => {
+    const tableContent = await appService.fetchWateringR1FromDb();
+    res.json({data: tableContent});
+});
+// Inserting into watering R2 and R1
+router.post('/insertWatering', async(req, res) => {
+    const { wateringId, pH, temperature, wateringDate, amount, plantId } = req.body;
+    const insertResult = await appService.insertWatering(wateringId, pH, temperature, wateringDate, amount, plantId);
+    if (insertResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+// Deleting WateringR1 and cascading it to WateringR2
+router.post('/deleteWatering', async(req, res) => {
+    const { wateringDate, temperature, pH } = req.body;
+    const deleteResult = await appService.deleteWatering(wateringDate, temperature, pH);
+    if(deleteResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+// Update Tuple in WateringR2
+router.post('/updateWateringR2', async(req, res) => {
+    const { wateringId, wateringDate, temperature, pH, plantId } = req.body;
+    const updateResult = await appService.updateWateringR2(wateringId, wateringDate, temperature, pH, plantId);
+    if(updateResult) {
+        res.json({ success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+})
+
 router.get('/demotable', async (req, res) => {
     const tableContent = await appService.fetchDemotableFromDb();
     res.json({data: tableContent});
