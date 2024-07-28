@@ -17,12 +17,29 @@ router.get('/check-db-connection', async (req, res) => {
 
 router.get('/housepeople', async (req, res) => {
     const tableContent = await appService.fetchHousePeopleFromDb();
-    res.json({data: tableContent});
+    res.json({ data: tableContent });
+});
+
+router.get('/plant', async (req, res) => {
+    const tableContent = await appService.fetchPlantFromDb();
+    res.json({ data: tableContent });
+});
+
+
+router.post('/insertHousePerson', async (req, res) => {
+    const { username, password, fullName, gender, gardenRole, yearsOfExp } = req.body;
+    try {
+        await appService.insertHousePersonIntoDb(username, password, fullName, gender, gardenRole, yearsOfExp);
+        res.status(200).send('User inserted successfully');
+    } catch (err) {
+        console.error('Failed to insert user:', err);
+        res.status(500).send('Failed to insert user');
+    }
 });
 
 router.get('/demotable', async (req, res) => {
     const tableContent = await appService.fetchDemotableFromDb();
-    res.json({data: tableContent});
+    res.json({ data: tableContent });
 });
 
 router.post("/initiate-demotable", async (req, res) => {
@@ -58,7 +75,7 @@ router.post("/delete-demotable", async (req, res) => {
     console.log("request body ", req.body)
     const { id, name } = req.body;
     const deleteResult = await appService.deleteDemotable(id, name);
-    if(deleteResult) {
+    if (deleteResult) {
         res.json({ success: true });
     } else {
         res.status(500).json({ success: false });
@@ -68,13 +85,13 @@ router.post("/delete-demotable", async (req, res) => {
 router.get('/count-demotable', async (req, res) => {
     const tableCount = await appService.countDemotable();
     if (tableCount >= 0) {
-        res.json({ 
-            success: true,  
+        res.json({
+            success: true,
             count: tableCount
         });
     } else {
-        res.status(500).json({ 
-            success: false, 
+        res.status(500).json({
+            success: false,
             count: tableCount
         });
     }

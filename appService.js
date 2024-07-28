@@ -85,6 +85,29 @@ async function fetchHousePeopleFromDb() {
     });
 }
 
+async function fetchPlantFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT * FROM Plants');
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+async function insertHousePersonIntoDb(username, password, fullName, gender, gardenRole, yearsOfExp) {
+    return await withOracleDB(async (connection) => {
+        const query = `
+        INSERT INTO HousePeople (username, pass, fullName, gender, gardenRole, yearsOfExp)
+        VALUES (:username, :password, :fullName, :gender, :gardenRole, :yearsOfExp)
+    `;
+        const binds = [username, password, fullName, gender, gardenRole, yearsOfExp];
+        await connection.execute(query, binds, { autoCommit: true });
+    }).catch((err) => {
+        console.error('Database insert error:', err);
+        throw err;
+    });
+}
+
 async function fetchDemotableFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute('SELECT * FROM DEMOTABLE');
@@ -98,7 +121,7 @@ async function initiateDemotable() {
     return await withOracleDB(async (connection) => {
         try {
             await connection.execute(`DROP TABLE DEMOTABLE`);
-        } catch(err) {
+        } catch (err) {
             console.log('Table might not exist, proceeding to create...');
         }
 
@@ -168,9 +191,11 @@ async function countDemotable() {
 module.exports = {
     testOracleConnection,
     fetchHousePeopleFromDb,
+    fetchPlantFromDb,
+    insertHousePersonIntoDb,
     fetchDemotableFromDb,
-    initiateDemotable, 
-    insertDemotable, 
+    initiateDemotable,
+    insertDemotable,
     updateNameDemotable,
     deleteDemotable,
     countDemotable
