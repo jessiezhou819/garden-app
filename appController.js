@@ -17,62 +17,28 @@ router.get('/check-db-connection', async (req, res) => {
 
 router.get('/housepeople', async (req, res) => {
     const tableContent = await appService.fetchHousePeopleFromDb();
-    res.json({data: tableContent});
+    res.json({ data: tableContent });
 });
 
-/**
- * ALL API ENDPOINTS RELATED TO WATERING
- */
+router.get('/plant', async (req, res) => {
+    const tableContent = await appService.fetchPlantFromDb();
+    res.json({ data: tableContent });
+});
 
-// For fetching watering entries from R2 and R1
-router.get('/watering', async(req, res) => {
-    const tableContent = await appService.fetchWateringFromDb();
-    res.json({data: tableContent});
-});
-// For fetching watering entries from R2
-router.get('/wateringR2', async(req, res) => {
-    const tableContent = await appService.fetchWateringR2FromDb();
-    res.json({data: tableContent});
-});
-// For fetching watering entries from R1
-router.get('/wateringR1', async(req, res) => {
-    const tableContent = await appService.fetchWateringR1FromDb();
-    res.json({data: tableContent});
-});
-// Inserting into watering R2 and R1
-router.post('/insertWatering', async(req, res) => {
-    const { wateringId, pH, temperature, wateringDate, amount, plantId } = req.body;
-    const insertResult = await appService.insertWatering(wateringId, pH, temperature, wateringDate, amount, plantId);
-    if (insertResult) {
-        res.json({ success: true });
-    } else {
-        res.status(500).json({ success: false });
+router.post('/insertHousePerson', async (req, res) => {
+    const { username, password, fullName, gender, gardenRole, yearsOfExp } = req.body;
+    try {
+        await appService.insertHousePersonIntoDb(username, password, fullName, gender, gardenRole, yearsOfExp);
+        res.status(200).send('User inserted successfully');
+    } catch (err) {
+        console.error('Failed to insert user:', err);
+        res.status(500).send('Failed to insert user');
     }
 });
-// Deleting WateringR1 and cascading it to WateringR2
-router.post('/deleteWatering', async(req, res) => {
-    const { wateringDate, temperature, pH } = req.body;
-    const deleteResult = await appService.deleteWatering(wateringDate, temperature, pH);
-    if(deleteResult) {
-        res.json({ success: true });
-    } else {
-        res.status(500).json({ success: false });
-    }
-});
-// Update Tuple in WateringR2
-router.post('/updateWateringR2', async(req, res) => {
-    const { wateringId, wateringDate, temperature, pH, plantId } = req.body;
-    const updateResult = await appService.updateWateringR2(wateringId, wateringDate, temperature, pH, plantId);
-    if(updateResult) {
-        res.json({ success: true });
-    } else {
-        res.status(500).json({ success: false });
-    }
-})
 
 router.get('/demotable', async (req, res) => {
     const tableContent = await appService.fetchDemotableFromDb();
-    res.json({data: tableContent});
+    res.json({ data: tableContent });
 });
 
 router.post("/initiate-demotable", async (req, res) => {
@@ -108,7 +74,7 @@ router.post("/delete-demotable", async (req, res) => {
     console.log("request body ", req.body)
     const { id, name } = req.body;
     const deleteResult = await appService.deleteDemotable(id, name);
-    if(deleteResult) {
+    if (deleteResult) {
         res.json({ success: true });
     } else {
         res.status(500).json({ success: false });
@@ -118,13 +84,13 @@ router.post("/delete-demotable", async (req, res) => {
 router.get('/count-demotable', async (req, res) => {
     const tableCount = await appService.countDemotable();
     if (tableCount >= 0) {
-        res.json({ 
-            success: true,  
+        res.json({
+            success: true,
             count: tableCount
         });
     } else {
-        res.status(500).json({ 
-            success: false, 
+        res.status(500).json({
+            success: false,
             count: tableCount
         });
     }
