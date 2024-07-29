@@ -85,6 +85,24 @@ async function fetchHousePeopleFromDb() {
     });
 }
 
+async function fetchGardenFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT * FROM Garden');
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+async function fetchWorksOnFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT * FROM WorksOn');
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
 /**
  * DATABASE OPERATIONS RELATED TO WATERING
  */
@@ -329,6 +347,8 @@ async function countDemotable() {
 module.exports = {
     testOracleConnection,
     fetchHousePeopleFromDb,
+    fetchGardenFromDb,
+    fetchWorksOnFromDb,
     fetchWateringFromDb,
     fetchWateringR2FromDb,
     fetchWateringR1FromDb,

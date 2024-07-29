@@ -61,6 +61,55 @@ async function fetchAndDisplayHousePeople() {
     });
 }
 
+// Fetches data from the garden table and displays it.
+async function fetchAndDisplayGarden() {
+    const tableElement = document.getElementById('garden');
+    const tableBody = tableElement.querySelector('tbody');
+
+    const response = await fetch('/garden', {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+    const housepeopleContent = responseData.data;
+
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    housepeopleContent.forEach(user => {
+        const row = tableBody.insertRow();
+        user.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+}
+
+// Fetches data from the WorksOn table and displays it.
+async function fetchAndDisplayWorksOn() {
+    const tableElement = document.getElementById('workson');
+    const tableBody = tableElement.querySelector('tbody');
+
+    const response = await fetch('/workson', {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+    const housepeopleContent = responseData.data;
+
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    housepeopleContent.forEach(user => {
+        const row = tableBody.insertRow();
+        user.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+}
 /**
  * ALL FUNCTIONALITIES RELATED TO WATERING
  */
@@ -301,7 +350,6 @@ async function insertDemotable(event) {
             name: nameValue
         })
     });
-
     const responseData = await response.json();
     const messageElement = document.getElementById('insertResultMsg');
 
@@ -312,6 +360,8 @@ async function insertDemotable(event) {
         messageElement.textContent = "Error inserting data!";
     }
 }
+
+
 
 // Updates names in the demotable.
 async function updateNameDemotable(event) {
@@ -402,11 +452,13 @@ window.onload = function() {
     document.getElementById("deleteWateringR1").addEventListener("submit", deleteWatering);
     document.getElementById("updateWateringR2").addEventListener("submit", updateWateringR2);
 
+
     // TEMPLATE RELATED FUNCTIONS
     document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
     document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
     document.getElementById("deleteDemotable").addEventListener("submit", deleteDemotable);
     document.getElementById("countDemotable").addEventListener("click", countDemotable);
+    
 };
 
 // General function to refresh the displayed table data. 
@@ -414,6 +466,8 @@ window.onload = function() {
 function fetchTableData() {
     // TEMPLATED RELATED FUNCTIONS
     fetchAndDisplayUsers();
+    fetchAndDisplayGarden();
+    fetchAndDisplayWorksOn();
 
     // GARDEN RELATED FUNCTIONS
     fetchAndDisplayHousePeople();

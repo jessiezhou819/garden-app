@@ -20,6 +20,16 @@ router.get('/housepeople', async (req, res) => {
     res.json({data: tableContent});
 });
 
+router.get('/garden', async (req, res) => {
+    const tableContent = await appService.fetchGardenFromDb();
+    res.json({data: tableContent});
+});
+
+router.get('/workson', async (req, res) => {
+    const tableContent = await appService.fetchWorksOnFromDb();
+    res.json({data: tableContent});
+});
+
 /**
  * ALL API ENDPOINTS RELATED TO WATERING
  */

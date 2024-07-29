@@ -24,7 +24,9 @@
 
     <br><hr><br> <!-- ========================================================================= -->
     
-    <!-- Show 'Housepeople'. 
+    <div style="display:flex; flex-direction:row; justify-content:space-evenly; flex-wrap:wrap;">
+    <div>
+        <!-- Show 'Housepeople'. 
         Data will be fetched and inserted here dynamically using JavaScript. -->
     <h2>Show HousePeople</h2>
     <table id="housepeople" border="1">
@@ -41,6 +43,37 @@
         <tbody>
         </tbody>
     </table>
+    </div>
+        <div>
+        <h2>Show Garden</h2>
+        <table id="garden" border="1">
+            <thead>
+                <tr>
+                    <th>Garden Name</th>
+                    <th>Location</th>
+                    <th>Soil Type</th>
+                    <th>Garden Size</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        </div>
+        <div>
+        <h2>Show WorksOn</h2>
+        <table id="workson" border="1">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Garden Name</th>
+                    <th>Location</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        </div>
+    </div>
 
     <br><hr><br> <!-- ========================================================================= -->
 
@@ -137,7 +170,7 @@
     </div>
 
     <br><hr><br> <!-- ========================================================================= -->
-
+ 
     <!-- Show 'Demotable'. 
         Data will be fetched and inserted here dynamically using JavaScript. -->
     <h2>Show Demotable</h2>
