@@ -110,6 +110,46 @@ async function fetchAndDisplayWorksOn() {
         });
     });
 }
+
+async function fetchAndDisplayDivision(event) {
+    console.log("started function");
+    event.preventDefault();
+    const username = document.getElementById('inputUsername').value;
+
+    const response = await fetch('/division', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username })
+      });
+
+      const responseData = await response.json();
+      const messageElement = document.getElementById('divisionMsg');
+
+      const tableElement = document.getElementById('divisiontable');
+      const tableBody = tableElement.querySelector('tbody');
+
+        if (tableBody) {
+            tableBody.innerHTML = '';
+        }
+
+    if (responseData.success) {
+        messageElement.textContent = "Found User!";
+
+        const divisionContent = responseData.data;
+
+        divisionContent.forEach(user => {
+            const row = tableBody.insertRow();
+            user.forEach((field, index) => {
+                const cell = row.insertCell(index);
+                cell.textContent = field;
+            });
+        });
+    } else {
+        messageElement.textContent = "Error finding data!";
+    }
+}
 /**
  * ALL FUNCTIONALITIES RELATED TO WATERING
  */
@@ -452,7 +492,7 @@ window.onload = function() {
     document.getElementById("deleteWateringR1").addEventListener("submit", deleteWatering);
     document.getElementById("updateWateringR2").addEventListener("submit", updateWateringR2);
 
-
+    document.getElementById("selectUser").addEventListener("submit", fetchAndDisplayDivision);
     // TEMPLATE RELATED FUNCTIONS
     document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
     document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);

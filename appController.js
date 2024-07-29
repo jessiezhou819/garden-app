@@ -30,6 +30,16 @@ router.get('/workson', async (req, res) => {
     res.json({data: tableContent});
 });
 
+router.post('/division', async(req, res) => {
+    const { username } = req.body;
+    const divisionResult = await appService.findDivision(username);
+    if (divisionResult !== null) {
+        res.json({ data: divisionResult, success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
 /**
  * ALL API ENDPOINTS RELATED TO WATERING
  */

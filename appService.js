@@ -103,6 +103,25 @@ async function fetchWorksOnFromDb() {
     });
 }
 
+async function findDivision(username) {
+return await withOracleDB(async (connection) => {
+        const result = await connection.execute(
+            `SELECT gardenName, loc FROM WorksOn WHERE username=:username`,
+            [username],
+            { autoCommit: true }
+        );
+        console.log(result);
+
+        if (result.rows && result.rows.length > 0) {
+            return result.rows;
+        } else {
+            return null;
+        }
+    }).catch(() => {
+        return null;
+    });
+}
+
 /**
  * DATABASE OPERATIONS RELATED TO WATERING
  */
@@ -266,7 +285,7 @@ async function fetchDemotableFromDb() {
         const result = await connection.execute('SELECT * FROM DEMOTABLE');
         return result.rows;
     }).catch(() => {
-        return [];
+        return null;
     });
 }
 
@@ -349,6 +368,7 @@ module.exports = {
     fetchHousePeopleFromDb,
     fetchGardenFromDb,
     fetchWorksOnFromDb,
+    findDivision,
     fetchWateringFromDb,
     fetchWateringR2FromDb,
     fetchWateringR1FromDb,
