@@ -68,8 +68,23 @@ router.post('/updateWateringR2', async(req, res) => {
     } else {
         res.status(500).json({ success: false });
     }
-})
+});
+// Group By COUNT() in WateringR2
+router.post('/groupbywateringR2', async(req, res) => {
+    const { orderBy } = req.body;
+    const groupByResult = await appService.groupByWateringR2(orderBy);
+    res.json({data: groupByResult});
+});
+// Having COUNT() in WateringR2
+router.post('/havingWateringR2', async(req, res) => {
+    const { havingQuery, numEntries } = req.body;
+    const havingResult = await appService.havingWateringR2(havingQuery, numEntries);
+    res.json({data: havingResult});
+});
 
+/**
+ * ALL API ENDPOINTS REALTED TO THE PROJECT TEMPLATE
+ */
 router.get('/demotable', async (req, res) => {
     const tableContent = await appService.fetchDemotableFromDb();
     res.json({data: tableContent});
@@ -105,7 +120,6 @@ router.post("/update-name-demotable", async (req, res) => {
 });
 
 router.post("/delete-demotable", async (req, res) => {
-    console.log("request body ", req.body)
     const { id, name } = req.body;
     const deleteResult = await appService.deleteDemotable(id, name);
     if(deleteResult) {
