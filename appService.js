@@ -124,12 +124,12 @@ async function fetchGardenFromDb() {
 }
 
 async function fetchWorksOnFromDb() {
-    // return await withOracleDB(async (connection) => {
-    //     const result = await connection.execute('SELECT * FROM WorksOn');
-    //     return result.rows;
-    // }).catch(() => {
-    //     return [];
-    // });
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT * FROM WorksOn');
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
 }
 
 /*
