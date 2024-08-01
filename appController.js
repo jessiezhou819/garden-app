@@ -20,6 +20,21 @@ router.get('/housepeople', async (req, res) => {
     res.json({data: tableContent});
 });
 
+router.get('/harvest', async (req, res) => {
+    const tableContent = await appService.fetchHarvestFromDb();
+    res.json({data: tableContent});
+});
+
+router.post('/filter', async(req, res) => {
+    const { query } = req.body;
+    const filterResult = await appService.filterHarvest(query);
+    if (filterResult !== null) {
+        res.json({ data: filterResult, success: true });
+    } else {
+        res.status(500).json({ success: false });
+    }
+});
+
 router.get('/garden', async (req, res) => {
     const tableContent = await appService.fetchGardenFromDb();
     res.json({data: tableContent});

@@ -96,6 +96,56 @@
         </table>
 
     <br><hr><br> <!-- ========================================================================= -->
+    <h2>Show Harvest</h2>
+        <table id="harvest" border="1">
+            <thead>
+                <tr>
+                    <th>Harvest ID</th>
+                    <th>Plant ID</th>
+                    <th>Quantity</th>
+                    <th>Date Harvested</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    
+    <h2>Filter</h2>
+    <form id="harvestForm">
+    
+          Plant ID: <input type="text" id="plantID" placeholder="Enter Plant ID"> <br><br>
+          Harvest ID: <input type="text" id="harvestID" placeholder="Enter Harvest ID"> <br><br>
+          Quantity: <input type="text" id="qty" placeholder="Enter Quantity"> <br><br>
+          <label for="comparison">Before/After:</label>
+          <select id="comparison" name="comparison">
+              <option value="" selected>Please select an option</option>
+              <option value="before">Before</option>
+              <option value="after">After</option>
+          </select><br>
+          Harvest Date: <input type="date" id="harvestDate" placeholder="Enter Harvest Date"> <br><br>
+
+    
+        <input type="submit" value="Submit">
+      </form>
+      <div id="filterResultMsg"></div>
+    
+      <div id="result"></div>
+
+      <h2>Filter Result</h2>
+      <table id="filterResultTable" border="1">
+        <thead>
+            <tr>
+                <th>Harvest ID</th>
+                <th>Plant ID</th>
+                <th>Quantity</th>
+                <th>Date Harvested</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+      <br><hr><br> <!-- ========================================================================= -->
 
     <div style="display:flex; flex-direction:row; justify-content:space-evenly; flex-wrap:wrap;">
         <div>

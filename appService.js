@@ -85,6 +85,35 @@ async function fetchHousePeopleFromDb() {
     });
 }
 
+async function fetchHarvestFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT * FROM Harvest');
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+async function filterHarvest(query) {
+    return await withOracleDB(async (connection) => {
+
+        const result = await connection.execute(
+            query,
+            [], 
+            { autoCommit: true }
+        );
+    
+
+        if (result.rows && result.rows.length > 0) {
+            return result.rows;
+        } else {
+            return null;
+        }
+    }).catch(() => {
+        return null;
+    });
+}
+
 async function fetchGardenFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute('SELECT * FROM Garden');
@@ -95,24 +124,55 @@ async function fetchGardenFromDb() {
 }
 
 async function fetchWorksOnFromDb() {
-    return await withOracleDB(async (connection) => {
-        const result = await connection.execute('SELECT * FROM WorksOn');
-        return result.rows;
-    }).catch(() => {
-        return [];
-    });
+    // return await withOracleDB(async (connection) => {
+    //     const result = await connection.execute('SELECT * FROM WorksOn');
+    //     return result.rows;
+    // }).catch(() => {
+    //     return [];
+    // });
 }
 
+/*
+SELECT g.gardenName, g.loc
+FROM Garden g
+WHERE NOT EXISTS (
+    SELECT hp.username
+    FROM HousePeople hp
+    WHERE hp.username=:username
+    MINUS
+    SELECT wo.username
+    FROM WorksOn wo
+    WHERE wo.gardenName = g.gardenName AND wo.loc = g.loc
+)
+*/
+
+
+// Garden g, WorksOn wo
 async function findDivision(username) {
-return await withOracleDB(async (connection) => {
+    return await withOracleDB(async (connection) => {
+        const checkIfUserExist = await connection.execute(
+            `select * from HousePeople where username=:username`,
+            [username]
+        );
         const result = await connection.execute(
-            `SELECT gardenName, loc FROM WorksOn WHERE username=:username`,
+            `
+            SELECT g.gardenName, g.loc
+            FROM Garden g
+            WHERE NOT EXISTS (
+                (SELECT hp.username
+                FROM HousePeople hp
+                WHERE hp.username=:username)
+                MINUS
+                (SELECT wo.username
+                FROM WorksOn wo
+                WHERE wo.gardenName = g.gardenName AND wo.loc = g.loc)
+            )
+            `,
             [username],
             { autoCommit: true }
         );
-        console.log(result);
 
-        if (result.rows && result.rows.length > 0) {
+        if (checkIfUserExist.rows.length !== 0 && result.rows && result.rows.length > 0) {
             return result.rows;
         } else {
             return null;
@@ -317,9 +377,6 @@ async function insertDemotable(id, name) {
             { autoCommit: true }
         );
 
-        console.log(result);
-        console.log(result.rowsAffected);
-        console.log(result.rowsAffected > 0);
         return result.rowsAffected && result.rowsAffected > 0;
     }).catch(() => {
         return false;
@@ -368,6 +425,8 @@ module.exports = {
     fetchHousePeopleFromDb,
     fetchGardenFromDb,
     fetchWorksOnFromDb,
+    fetchHarvestFromDb,
+    filterHarvest,
     findDivision,
     fetchWateringFromDb,
     fetchWateringR2FromDb,
