@@ -61,6 +61,186 @@ async function fetchAndDisplayHousePeople() {
     });
 }
 
+async function fetchAndDisplayHarvest() {
+
+    const tableElement = document.getElementById('harvest');
+    const tableBody = tableElement.querySelector('tbody');
+
+    const response = await fetch('/harvest', {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+    const harvestContent = responseData.data;
+
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    harvestContent.forEach(user => {
+        const row = tableBody.insertRow();
+        user.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+}
+
+async function filterHarvest(event) {
+    event.preventDefault();
+  
+    const plantid = document.getElementById('plantID').value;
+    const harvestid = document.getElementById('harvestID').value;
+    const qty = document.getElementById('qty').value;
+    const compare = document.getElementById('comparison').value;
+    const harvestDate = document.getElementById('harvestDate').value;
+
+    let whereClause = [];
+  
+    if (plantid) {
+        whereClause.push(`plantId = ${plantid}`);
+    }
+  
+    if (harvestid) {
+        whereClause.push(`harvestId = ${harvestid}`);
+    }
+  
+    if (qty) {
+        whereClause.push(`qty = ${qty}`);
+    }
+
+    if (harvestDate && compare) {
+        const operator = compare === 'before' ? '<' : '>';
+        whereClause.push(`harvestDate ${operator} TO_DATE('${harvestDate}', 'YYYY-MM-DD')`);
+    }
+
+    const query = `SELECT * FROM Harvest${whereClause.length ? ' WHERE ' + whereClause.join(' AND ') : ''}`;
+    // console.log(query); 
+    
+    const response = await fetch('/filter', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ query })
+    })
+
+    const responseData = await response.json();
+    const messageElement = document.getElementById('filterResultMsg');
+
+    const tableElement = document.getElementById('filterResultTable');
+    const tableBody = tableElement.querySelector('tbody');
+
+      if (tableBody) {
+          tableBody.innerHTML = '';
+      }
+
+  if (responseData.success) {
+      messageElement.textContent = "Found Record!";
+
+      const filterContent = responseData.data;
+
+      filterContent.forEach(user => {
+          const row = tableBody.insertRow();
+          user.forEach((field, index) => {
+              const cell = row.insertCell(index);
+              cell.textContent = field;
+          });
+      });
+  } else {
+      messageElement.textContent = "Error finding data!";
+  }
+
+}
+
+// Fetches data from the garden table and displays it.
+async function fetchAndDisplayGarden() {
+    const tableElement = document.getElementById('garden');
+    const tableBody = tableElement.querySelector('tbody');
+
+    const response = await fetch('/garden', {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+    const housepeopleContent = responseData.data;
+
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    housepeopleContent.forEach(user => {
+        const row = tableBody.insertRow();
+        user.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+}
+
+// Fetches data from the WorksOn table and displays it.
+async function fetchAndDisplayWorksOn() {
+    const tableElement = document.getElementById('workson');
+    const tableBody = tableElement.querySelector('tbody');
+
+    const response = await fetch('/workson', {
+        method: 'GET'
+    });
+
+    const responseData = await response.json();
+    const housepeopleContent = responseData.data;
+
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    housepeopleContent.forEach(user => {
+        const row = tableBody.insertRow();
+        user.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+}
+
+async function fetchAndDisplayDivision(event) {
+    event.preventDefault();
+    const username = document.getElementById('inputUsername').value;
+
+    const response = await fetch('/division', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username })
+      });
+
+      const responseData = await response.json();
+      const messageElement = document.getElementById('divisionMsg');
+
+      const tableElement = document.getElementById('divisiontable');
+      const tableBody = tableElement.querySelector('tbody');
+
+        if (tableBody) {
+            tableBody.innerHTML = '';
+        }
+
+    if (responseData.success) {
+        messageElement.textContent = "Found User!";
+
+        const divisionContent = responseData.data;
+
+        divisionContent.forEach(user => {
+            const row = tableBody.insertRow();
+            user.forEach((field, index) => {
+                const cell = row.insertCell(index);
+                cell.textContent = field;
+            });
+        });
+    } else {
+        messageElement.textContent = "Error finding data!";
+    }
+}
 /**
  * ALL FUNCTIONALITIES RELATED TO WATERING
  */
@@ -370,7 +550,6 @@ async function insertDemotable(event) {
             name: nameValue
         })
     });
-
     const responseData = await response.json();
     const messageElement = document.getElementById('insertResultMsg');
 
@@ -381,6 +560,8 @@ async function insertDemotable(event) {
         messageElement.textContent = "Error inserting data!";
     }
 }
+
+
 
 // Updates names in the demotable.
 async function updateNameDemotable(event) {
@@ -473,11 +654,14 @@ window.onload = function() {
     document.getElementById("groupbywateringR2").addEventListener("submit", groupByWateringR2);
     document.getElementById("havingwateringR2Form").addEventListener("submit", havingWateringR2);
 
+    document.getElementById("selectUser").addEventListener("submit", fetchAndDisplayDivision);
+    document.getElementById("harvestForm").addEventListener("submit", filterHarvest);
     // TEMPLATE RELATED FUNCTIONS
     document.getElementById("insertDemotable").addEventListener("submit", insertDemotable);
     document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
     document.getElementById("deleteDemotable").addEventListener("submit", deleteDemotable);
     document.getElementById("countDemotable").addEventListener("click", countDemotable);
+    
 };
 
 // General function to refresh the displayed table data. 
@@ -485,10 +669,13 @@ window.onload = function() {
 function fetchTableData() {
     // TEMPLATED RELATED FUNCTIONS
     fetchAndDisplayUsers();
+    fetchAndDisplayGarden();
+    fetchAndDisplayWorksOn();
 
     // GARDEN RELATED FUNCTIONS
     fetchAndDisplayHousePeople();
     fetchAndDisplayWatering();
     fetchAndDisplayWateringR2();
     fetchAndDisplayWateringR1();
+    fetchAndDisplayHarvest();
 }

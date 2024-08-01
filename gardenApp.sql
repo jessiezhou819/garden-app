@@ -228,7 +228,7 @@ INSERT INTO Plants VALUES (13, 'Thyme', 'Monthly', 'Thymus', 'Herb Garden', 'Nor
 INSERT INTO Plants VALUES (14, 'Orchid', 'Daily', 'Orchidaceae', 'Flower Garden', 'Northeast');
 INSERT INTO Plants VALUES (15, 'Papaya', 'Weekly', 'Carica', 'Tropical Garden', 'Center');
 INSERT INTO Plants VALUES (16, 'Ostrich Fern', 'Daily', 'Polypodiophyta', 'Tree Garden', 'Center');
-INSERT INTO Plants VALUES (17, 'Oak', 'Monthly', 'Quercus', 'Tree Garden', 'Northwest');
+INSERT INTO Plants VALUES (17, 'Oak', 'Monthly', 'Quercus', 'Tree Garden', 'East');
 
 -- Flower (5 entries)
 INSERT INTO Flower VALUES (1, 'Red', 'Rose');
