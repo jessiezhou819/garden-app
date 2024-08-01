@@ -239,6 +239,54 @@
         </div>
     </div>
 
+    <div style="display:flex; flex-direction:row; justify-content:space-evenly; flex-wrap:wrap;">
+        <div>
+            <h2>Watering R2 Aggregation GroupBy using COUNT()</h2>
+            <form id="groupbywateringR2">
+                order by: <select name="orderwateringR2" id="orderwateringR2">
+                    <option value="">NO ORDER</option>
+                    <option value="desc">DESCENDING</option>
+                    <option value="asc">ASCENDING</option>
+                </select>
+    
+                <button type="submit"> group </button> <br>
+            </form>
+            <table id="wateringR2GroupBy" border="1">
+                <thead>
+                    <tr>
+                        <th># of watering entries</th>
+                        <th>plantId</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <h2>Watering R2 Aggregation Having using COUNT()</h2>
+            <form id="havingwateringR2Form">
+                having query: <select name="havingwateringR2" id="havingwateringR2">
+                    <option value="equal">EQUAL</option>
+                    <option value="greaterthan">GREATER THAN</option>
+                    <option value="lessthan">LESS THAN</option>
+                </select>
+                num of watering entries: <input type="number" id="havingwateringR2numentries" placeholder="Enter # of entries" required> <br><br>
+
+                <button type="submit"> having </button>
+            </form>
+            <table id="wateringR2Having" border="1">
+                <thead>
+                    <tr>
+                        <th># of watering entries</th>
+                        <th>plantId</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     <br><hr><br> <!-- ========================================================================= -->
  
     <!-- Show 'Demotable'. 

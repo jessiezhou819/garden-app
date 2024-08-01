@@ -336,6 +336,55 @@ async function updateWateringR2(wateringId, wateringDate, temperature, pH, plant
         return false;
     })
 }
+// Group By COUNT() in WateringR2
+async function groupByWateringR2(orderBy) {
+    return await withOracleDB(async (connection) => {
+        if(orderBy == "desc") {
+            const result = await connection.execute(
+                `select count(wateringId), plantId from WateringR2 group by plantId order by count(wateringId) desc`
+            );
+            return result.rows;
+        } else if(orderBy == "asc") {
+            const result = await connection.execute(
+                `select count(wateringId), plantId from WateringR2 group by plantId order by count(wateringId) asc`
+            );
+            return result.rows;
+        } else {
+            const result = await connection.execute(
+                `select count(wateringId), plantId from WateringR2 group by plantId`
+            );
+            return result.rows;
+        }
+    }).catch(() => {
+        return [];
+    })
+}
+// Having COUNT() in WateringR2
+async function havingWateringR2(havingQuery, numEntries) {
+    return await withOracleDB(async (connection) => {
+        if(havingQuery == "equal") {
+            const result = await connection.execute(
+                `select count(wateringId), plantId from WateringR2 group by plantId having count(wateringId) = :numEntries`,
+                [numEntries]
+            );
+            return result.rows;
+        } else if(havingQuery == "greaterthan") {
+            const result = await connection.execute(
+                `select count(wateringId), plantId from WateringR2 group by plantId having count(wateringId) > :numEntries`,
+                [numEntries]
+            );
+            return result.rows;
+        } else {
+            const result = await connection.execute(
+                `select count(wateringId), plantId from wateringR2 group by plantId having count(wateringId) < :numEntries`,
+                [numEntries]
+            );
+            return result.rows;
+        }
+    }).catch(() => {
+        return [];
+    })
+}
 
 /**
  * TEMPLATE RELATED FUNCTIONS
@@ -422,6 +471,10 @@ async function countDemotable() {
 
 module.exports = {
     testOracleConnection,
+
+    /**
+     * EXPORTED FUNCTIONS RELATED TO GARDEN APP PROJECT
+     */
     fetchHousePeopleFromDb,
     fetchGardenFromDb,
     fetchWorksOnFromDb,
@@ -434,6 +487,12 @@ module.exports = {
     insertWatering,
     deleteWatering,
     updateWateringR2,
+    groupByWateringR2,
+    havingWateringR2,
+
+    /**
+     * EXPORTED FUNCTIONS RELATED TO TEMPLATE PROJECT
+     */
     fetchDemotableFromDb,
     initiateDemotable, 
     insertDemotable, 

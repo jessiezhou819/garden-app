@@ -392,8 +392,6 @@ async function updateWateringR2(event) {
     const pH = document.getElementById('updatepH').value;
     const plantId = document.getElementById('updateplantId').value;
 
-    // console.log(wateringId, wateringDate, temperature, pH, plantId);
-
     const response = await fetch('/updateWateringR2', {
         method: 'POST',
         headers: {
@@ -417,6 +415,77 @@ async function updateWateringR2(event) {
     } else {
         messageElement.textContent = "Error updating data!";
     }
+}
+// GroupBy on WateringR2 entry
+async function groupByWateringR2(event) {
+    event.preventDefault();
+
+    const tableElement = document.getElementById('wateringR2GroupBy');
+    const tableBody = tableElement.querySelector('tbody');
+
+    const orderBy = document.getElementById('orderwateringR2').value;
+
+    const response = await fetch('/groupbywateringR2', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            orderBy: orderBy
+        })
+    });
+
+    const responseData = await response.json();
+    const wateringGroupByContent = responseData.data;
+
+    if(tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    wateringGroupByContent.forEach(entry => {
+        const row = tableBody.insertRow();
+        entry.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+}
+// Having on WateringR2 entry
+async function havingWateringR2(event) {
+    event.preventDefault();
+
+    const tableElement = document.getElementById('wateringR2Having');
+    const tableBody = tableElement.querySelector('tbody');
+
+    const havingQuery = document.getElementById('havingwateringR2').value;
+    const numEntries = document.getElementById('havingwateringR2numentries').value;
+
+    const response = await fetch('/havingWateringR2', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            havingQuery: havingQuery,
+            numEntries: numEntries
+        })
+    });
+
+    const responseData = await response.json();
+    const wateringHavingContent = responseData.data;
+
+    if(tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    wateringHavingContent.forEach(entry => {
+        const row = tableBody.insertRow();
+        entry.forEach((field, index) => {
+            const cell = row.insertCell(index);
+            cell.textContent = field;
+        });
+    });
+
 }
 
 /**
@@ -582,6 +651,8 @@ window.onload = function() {
     document.getElementById("insertWatering").addEventListener("submit", insertWatering);
     document.getElementById("deleteWateringR1").addEventListener("submit", deleteWatering);
     document.getElementById("updateWateringR2").addEventListener("submit", updateWateringR2);
+    document.getElementById("groupbywateringR2").addEventListener("submit", groupByWateringR2);
+    document.getElementById("havingwateringR2Form").addEventListener("submit", havingWateringR2);
 
     document.getElementById("selectUser").addEventListener("submit", fetchAndDisplayDivision);
     document.getElementById("harvestForm").addEventListener("submit", filterHarvest);
