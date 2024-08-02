@@ -99,10 +99,10 @@ async function filterHarvest(query) {
 
         const result = await connection.execute(
             query,
-            [], 
+            [],
             { autoCommit: true }
         );
-    
+
 
         if (result.rows && result.rows.length > 0) {
             return result.rows;
@@ -129,6 +129,20 @@ async function fetchWorksOnFromDb() {
         return result.rows;
     }).catch(() => {
         return [];
+    });
+}
+
+// Fetch data from the Garden table
+async function fetchGardenProjFromDb(selectedColumns) {
+    return await withOracleDB(async (connection) => {
+        const columns = selectedColumns.length > 0 ? selectedColumns.join(', ') : '*';
+        const query = `SELECT ${columns} FROM Garden`;
+        console.log("Executing query:", query);  // Debugging line
+        const result = await connection.execute(query);
+        return result.rows;
+    }).catch((error) => {
+        console.error("Error fetching data from DB:", error.message);
+        throw error;  // Ensure the error is propagated up
     });
 }
 
@@ -241,7 +255,7 @@ async function insertWatering(wateringId, pH, temperature, wateringDate, amount,
                 [wateringId, wateringDate, temperature, pH, plantId],
                 { autoCommit: true }
             );
-            
+
             return insertIntoR2.rowsAffected && insertIntoR1.rowsAffected && insertIntoR2.rowsAffected > 0 && insertIntoR1.rowsAffected > 0;
         } else {
             return false;
@@ -249,7 +263,7 @@ async function insertWatering(wateringId, pH, temperature, wateringDate, amount,
     }).catch(() => {
         return false;
     })
-} 
+}
 // Deleting WateringR1 and cascading it to WateringR2
 async function deleteWatering(wateringDate, temperature, pH) {
     return await withOracleDB(async (connection) => {
@@ -268,63 +282,63 @@ async function deleteWatering(wateringDate, temperature, pH) {
 async function updateWateringR2(wateringId, wateringDate, temperature, pH, plantId) {
     return await withOracleDB(async (connection) => {
         var result;
-        if(wateringDate && temperature && pH) {
+        if (wateringDate && temperature && pH) {
             result = await connection.execute(
                 `update WateringR2 set pH=:pH, temperature=:temperature, wateringDate=TO_DATE(:wateringDate, 'YYYY-MM-DD') where wateringId=:wateringId`,
                 [pH, temperature, wateringDate, wateringId],
                 { autoCommit: true }
             );
         }
-        if(wateringDate && temperature) {
+        if (wateringDate && temperature) {
             result = await connection.execute(
                 `update WateringR2 set temperature=:temperature, wateringDate=TO_DATE(:wateringDate, 'YYYY-MM-DD') where wateringId=:wateringId`,
                 [temperature, wateringDate, wateringId],
                 { autoCommit: true }
             );
         }
-        if(temperature && pH) {
+        if (temperature && pH) {
             result = await connection.execute(
                 `update WateringR2 set pH=:pH, temperature=:temperature where wateringId=:wateringId`,
                 [pH, temperature, wateringId],
                 { autoCommit: true }
             );
         }
-        if(wateringDate && pH) {
+        if (wateringDate && pH) {
             result = await connection.execute(
                 `update WateringR2 set pH=:pH, wateringDate=TO_DATE(:wateringDate, 'YYYY-MM-DD') where wateringId=:wateringId`,
                 [pH, wateringDate, wateringId],
                 { autoCommit: true }
             );
         }
-        if(wateringDate) {
+        if (wateringDate) {
             result = await connection.execute(
                 `update WateringR2 set wateringDate=TO_DATE(:wateringDate, 'YYYY-MM-DD') where wateringId=:wateringId`,
                 [wateringDate, wateringId],
                 { autoCommit: true }
             );
         }
-        if(temperature) {
+        if (temperature) {
             result = await connection.execute(
                 `update WateringR2 set temperature=:temperature where wateringId=:wateringId`,
                 [temperature, wateringId],
                 { autoCommit: true }
             );
         }
-        if(pH) {
+        if (pH) {
             result = await connection.execute(
                 `update WateringR2 set pH=:pH where wateringId=:wateringId`,
                 [pH, wateringId],
                 { autoCommit: true }
             );
         }
-        if(plantId) {
+        if (plantId) {
             result = await connection.execute(
                 `update WateringR2 set plantId=:plantId where wateringId=:wateringId`,
                 [plantId, wateringId],
                 { autoCommit: true }
             );
         }
-        if(wateringDate && temperature && pH && plantId) {
+        if (wateringDate && temperature && pH && plantId) {
             result = await connection.execute(
                 `update WateringR2 set plantId=:plantId, pH=:pH, temperature=:temperature, wateringDate=TO_DATE(:wateringDate, 'YYYY-MM-DD') where wateringId=:wateringId`,
                 [plantId, pH, temperature, wateringDate, wateringId],
@@ -339,12 +353,12 @@ async function updateWateringR2(wateringId, wateringDate, temperature, pH, plant
 // Group By COUNT() in WateringR2
 async function groupByWateringR2(orderBy) {
     return await withOracleDB(async (connection) => {
-        if(orderBy == "desc") {
+        if (orderBy == "desc") {
             const result = await connection.execute(
                 `select count(wateringId), plantId from WateringR2 group by plantId order by count(wateringId) desc`
             );
             return result.rows;
-        } else if(orderBy == "asc") {
+        } else if (orderBy == "asc") {
             const result = await connection.execute(
                 `select count(wateringId), plantId from WateringR2 group by plantId order by count(wateringId) asc`
             );
@@ -362,13 +376,13 @@ async function groupByWateringR2(orderBy) {
 // Having COUNT() in WateringR2
 async function havingWateringR2(havingQuery, numEntries) {
     return await withOracleDB(async (connection) => {
-        if(havingQuery == "equal") {
+        if (havingQuery == "equal") {
             const result = await connection.execute(
                 `select count(wateringId), plantId from WateringR2 group by plantId having count(wateringId) = :numEntries`,
                 [numEntries]
             );
             return result.rows;
-        } else if(havingQuery == "greaterthan") {
+        } else if (havingQuery == "greaterthan") {
             const result = await connection.execute(
                 `select count(wateringId), plantId from WateringR2 group by plantId having count(wateringId) > :numEntries`,
                 [numEntries]
@@ -402,7 +416,7 @@ async function initiateDemotable() {
     return await withOracleDB(async (connection) => {
         try {
             await connection.execute(`DROP TABLE DEMOTABLE`);
-        } catch(err) {
+        } catch (err) {
             console.log('Table might not exist, proceeding to create...');
         }
 
@@ -489,13 +503,14 @@ module.exports = {
     updateWateringR2,
     groupByWateringR2,
     havingWateringR2,
+    fetchGardenProjFromDb,
 
     /**
      * EXPORTED FUNCTIONS RELATED TO TEMPLATE PROJECT
      */
     fetchDemotableFromDb,
-    initiateDemotable, 
-    insertDemotable, 
+    initiateDemotable,
+    insertDemotable,
     updateNameDemotable,
     deleteDemotable,
     countDemotable

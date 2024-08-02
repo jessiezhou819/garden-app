@@ -28,12 +28,12 @@ async function checkDbConnection() {
     statusElem.style.display = 'inline';
 
     response.text()
-    .then((text) => {
-        statusElem.textContent = text;
-    })
-    .catch((error) => {
-        statusElem.textContent = 'connection timed out';  // Adjust error handling if required.
-    });
+        .then((text) => {
+            statusElem.textContent = text;
+        })
+        .catch((error) => {
+            statusElem.textContent = 'connection timed out';  // Adjust error handling if required.
+        });
 }
 
 // Fetches data from the housepeople table and displays it.
@@ -88,7 +88,7 @@ async function fetchAndDisplayHarvest() {
 
 async function filterHarvest(event) {
     event.preventDefault();
-  
+
     const plantid = document.getElementById('plantID').value;
     const harvestid = document.getElementById('harvestID').value;
     const qty = document.getElementById('qty').value;
@@ -96,15 +96,15 @@ async function filterHarvest(event) {
     const harvestDate = document.getElementById('harvestDate').value;
 
     let whereClause = [];
-  
+
     if (plantid) {
         whereClause.push(`plantId = ${plantid}`);
     }
-  
+
     if (harvestid) {
         whereClause.push(`harvestId = ${harvestid}`);
     }
-  
+
     if (qty) {
         whereClause.push(`qty = ${qty}`);
     }
@@ -116,11 +116,11 @@ async function filterHarvest(event) {
 
     const query = `SELECT * FROM Harvest${whereClause.length ? ' WHERE ' + whereClause.join(' AND ') : ''}`;
     // console.log(query); 
-    
+
     const response = await fetch('/filter', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({ query })
     })
@@ -131,25 +131,25 @@ async function filterHarvest(event) {
     const tableElement = document.getElementById('filterResultTable');
     const tableBody = tableElement.querySelector('tbody');
 
-      if (tableBody) {
-          tableBody.innerHTML = '';
-      }
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
 
-  if (responseData.success) {
-      messageElement.textContent = "Found Record!";
+    if (responseData.success) {
+        messageElement.textContent = "Found Record!";
 
-      const filterContent = responseData.data;
+        const filterContent = responseData.data;
 
-      filterContent.forEach(user => {
-          const row = tableBody.insertRow();
-          user.forEach((field, index) => {
-              const cell = row.insertCell(index);
-              cell.textContent = field;
-          });
-      });
-  } else {
-      messageElement.textContent = "Error finding data!";
-  }
+        filterContent.forEach(user => {
+            const row = tableBody.insertRow();
+            user.forEach((field, index) => {
+                const cell = row.insertCell(index);
+                cell.textContent = field;
+            });
+        });
+    } else {
+        messageElement.textContent = "Error finding data!";
+    }
 
 }
 
@@ -210,20 +210,20 @@ async function fetchAndDisplayDivision(event) {
     const response = await fetch('/division', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({ username })
-      });
+    });
 
-      const responseData = await response.json();
-      const messageElement = document.getElementById('divisionMsg');
+    const responseData = await response.json();
+    const messageElement = document.getElementById('divisionMsg');
 
-      const tableElement = document.getElementById('divisiontable');
-      const tableBody = tableElement.querySelector('tbody');
+    const tableElement = document.getElementById('divisiontable');
+    const tableBody = tableElement.querySelector('tbody');
 
-        if (tableBody) {
-            tableBody.innerHTML = '';
-        }
+    if (tableBody) {
+        tableBody.innerHTML = '';
+    }
 
     if (responseData.success) {
         messageElement.textContent = "Found User!";
@@ -280,7 +280,7 @@ async function fetchAndDisplayWateringR2() {
     const responseData = await response.json();
     const wateringR2Content = responseData.data;
 
-    if(tableBody) {
+    if (tableBody) {
         tableBody.innerHTML = '';
     }
 
@@ -304,7 +304,7 @@ async function fetchAndDisplayWateringR1() {
     const responseData = await response.json();
     const wateringR1Content = responseData.data;
 
-    if(tableBody) {
+    if (tableBody) {
         tableBody.innerHTML = '';
     }
 
@@ -438,7 +438,7 @@ async function groupByWateringR2(event) {
     const responseData = await response.json();
     const wateringGroupByContent = responseData.data;
 
-    if(tableBody) {
+    if (tableBody) {
         tableBody.innerHTML = '';
     }
 
@@ -474,7 +474,7 @@ async function havingWateringR2(event) {
     const responseData = await response.json();
     const wateringHavingContent = responseData.data;
 
-    if(tableBody) {
+    if (tableBody) {
         tableBody.innerHTML = '';
     }
 
@@ -595,7 +595,7 @@ async function updateNameDemotable(event) {
 // Deletes record from demotable.
 async function deleteDemotable(event) {
     event.preventDefault();
-    
+
     const idValue = document.getElementById('removeId').value;
     const nameValue = document.getElementById('removeName').value;
 
@@ -640,10 +640,67 @@ async function countDemotable() {
 }
 
 
+async function projectFunction(event) {
+    event.preventDefault();
+
+    const col1 = document.getElementById('col1').checked;
+    const col2 = document.getElementById('col2').checked;
+    const col3 = document.getElementById('col3').checked;
+    const col4 = document.getElementById('col4').checked;
+
+    const response = await fetch('/project', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            col1: col1,
+            col2: col2,
+            col3: col3,
+            col4: col4
+        })
+    });
+
+    const result = await response.json();
+    console.log("Received result:", result);
+
+    // Generate table based on selected columns
+    if (result.success) {
+        generateTable(result.data, col1, col2, col3, col4);
+    } else {
+        console.error("Error fetching data:", result.message);
+    }
+}
+
+function generateTable(data, col1, col2, col3, col4) {
+    let tableHtml = '<table border="1"><tr>';
+
+    if (col1) tableHtml += '<th>Garden Name</th>';
+    if (col2) tableHtml += '<th>Location</th>';
+    if (col3) tableHtml += '<th>Soil Type</th>';
+    if (col4) tableHtml += '<th>Garden Size</th>';
+
+    tableHtml += '</tr>';
+
+    data.forEach(row => {
+        tableHtml += '<tr>';
+        let cellIndex = 0;
+        if (col1) tableHtml += `<td>${row[cellIndex++]}</td>`;
+        if (col2) tableHtml += `<td>${row[cellIndex++]}</td>`;
+        if (col3) tableHtml += `<td>${row[cellIndex++]}</td>`;
+        if (col4) tableHtml += `<td>${row[cellIndex++]}</td>`;
+        tableHtml += '</tr>';
+    });
+
+    tableHtml += '</table>';
+
+    document.getElementById('tableContainer').innerHTML = tableHtml;
+}
+
 // ---------------------------------------------------------------
 // Initializes the webpage functionalities.
 // Add or remove event listeners based on the desired functionalities.
-window.onload = function() {
+window.onload = function () {
     // GARDEN RELATED FUNCTIONS
     checkDbConnection();
     fetchTableData();
@@ -661,7 +718,7 @@ window.onload = function() {
     document.getElementById("updataNameDemotable").addEventListener("submit", updateNameDemotable);
     document.getElementById("deleteDemotable").addEventListener("submit", deleteDemotable);
     document.getElementById("countDemotable").addEventListener("click", countDemotable);
-    
+    document.getElementById("project").addEventListener("submit", projectFunction);
 };
 
 // General function to refresh the displayed table data. 
