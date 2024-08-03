@@ -115,7 +115,6 @@ async function filterHarvest(event) {
     }
 
     const query = `SELECT * FROM Harvest${whereClause.length ? ' WHERE ' + whereClause.join(' AND ') : ''}`;
-    // console.log(query); 
 
     const response = await fetch('/filter', {
         method: 'POST',
@@ -662,7 +661,6 @@ async function projectFunction(event) {
     });
 
     const result = await response.json();
-    console.log("Received result:", result);
 
     // Generate table based on selected columns
     if (result.success) {

@@ -66,12 +66,9 @@ router.post('/project', async (req, res) => {
     if (col4) selectedColumns.push('gardenSize');
 
     try {
-        console.log("Selected columns:", selectedColumns);  // Debugging line
         const data = await appService.fetchGardenProjFromDb(selectedColumns);
-        console.log("Fetched data:", data);  // Debugging line
         res.json({ success: true, data });
     } catch (error) {
-        console.error("Error in /project route:", error.message);  // Debugging line
         res.status(500).json({ success: false, message: `Error fetching data from database: ${error.message}` });
     }
 });

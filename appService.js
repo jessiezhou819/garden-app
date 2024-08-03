@@ -137,7 +137,6 @@ async function fetchGardenProjFromDb(selectedColumns) {
     return await withOracleDB(async (connection) => {
         const columns = selectedColumns.length > 0 ? selectedColumns.join(', ') : '*';
         const query = `SELECT ${columns} FROM Garden`;
-        console.log("Executing query:", query);  // Debugging line
         const result = await connection.execute(query);
         return result.rows;
     }).catch((error) => {
