@@ -507,15 +507,15 @@ async function nestedAggregation(event) {
     const responseData = await response.json();
     const messageElement = document.getElementById('nestedaggregationMsg');
 
-    if(tableBody) {
+    if (tableBody) {
         tableBody.innerHTML = '';
     }
 
-    if(responseData.success) {
+    if (responseData.success) {
         messageElement.textContent = "Successful data aggregation!";
 
         const nestedaggregationContent = responseData.data;
-        
+
         nestedaggregationContent.forEach(content => {
             const row = tableBody.insertRow();
             content.forEach((field, index) => {
@@ -542,10 +542,10 @@ async function projectFunction(event) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            col1: col1,
-            col2: col2,
-            col3: col3,
-            col4: col4
+            garden_name: col1,
+            garden_loc: col2,
+            soil_type: col3,
+            garden_size: col4
         })
     });
 

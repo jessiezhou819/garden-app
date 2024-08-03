@@ -57,13 +57,13 @@ router.post('/division', async (req, res) => {
 
 // Route to handle fetching garden data
 router.post('/project', async (req, res) => {
-    const { col1, col2, col3, col4 } = req.body;
+    const { garden_name, garden_loc, soil_type, garden_size } = req.body;
     // name is database
     let selectedColumns = [];
-    if (col1) selectedColumns.push('gardenName');
-    if (col2) selectedColumns.push('loc');
-    if (col3) selectedColumns.push('soilType');
-    if (col4) selectedColumns.push('gardenSize');
+    if (garden_name) selectedColumns.push('gardenName');
+    if (garden_loc) selectedColumns.push('loc');
+    if (soil_type) selectedColumns.push('soilType');
+    if (garden_size) selectedColumns.push('gardenSize');
 
     try {
         const data = await appService.fetchGardenProjFromDb(selectedColumns);
@@ -135,13 +135,13 @@ router.post('/havingWateringR2', async (req, res) => {
     res.json({ data: havingResult });
 });
 // Nested aggregation for joined WateringR1 and WateringR2
-router.post('/nestedaggregation', async(req, res) => {
+router.post('/nestedaggregation', async (req, res) => {
     const { query } = req.body;
     const nestedaggregationResult = await appService.nestedAggregation(query);
-    if(nestedaggregationResult !== null) {
-        res.json({data: nestedaggregationResult, success: true});
+    if (nestedaggregationResult !== null) {
+        res.json({ data: nestedaggregationResult, success: true });
     } else {
-        res.status(500).json({success: false});
+        res.status(500).json({ success: false });
     }
 });
 
