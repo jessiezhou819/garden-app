@@ -484,7 +484,48 @@ async function havingWateringR2(event) {
             cell.textContent = field;
         });
     });
+}
+// Nested Aggregation for Watering R1 and R2 joined table
+async function nestedAggregation(event) {
+    event.preventDefault();
 
+    const tableElement = document.getElementById('nestedaggregationtable');
+    const tableBody = tableElement.querySelector('tbody');
+
+    const query = document.getElementById('nestedaggregationdropdown').value;
+
+    const response = await fetch('/nestedaggregation', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            query: query
+        })
+    });
+
+    const responseData = await response.json();
+    const messageElement = document.getElementById('nestedaggregationMsg');
+
+    if(tableBody) {
+        tableBody.innerHTML = '';
+    }
+
+    if(responseData.success) {
+        messageElement.textContent = "Successful data aggregation!";
+
+        const nestedaggregationContent = responseData.data;
+        
+        nestedaggregationContent.forEach(content => {
+            const row = tableBody.insertRow();
+            content.forEach((field, index) => {
+                const cell = row.insertCell(index);
+                cell.textContent = field;
+            });
+        });
+    } else {
+        messageElement.textContent = "Error aggregating data!";
+    }
 }
 
 /**
@@ -708,6 +749,7 @@ window.onload = function () {
     document.getElementById("updateWateringR2").addEventListener("submit", updateWateringR2);
     document.getElementById("groupbywateringR2").addEventListener("submit", groupByWateringR2);
     document.getElementById("havingwateringR2Form").addEventListener("submit", havingWateringR2);
+    document.getElementById("nestedaggregation").addEventListener("submit", nestedAggregation);
 
     document.getElementById("selectUser").addEventListener("submit", fetchAndDisplayDivision);
     document.getElementById("harvestForm").addEventListener("submit", filterHarvest);

@@ -398,6 +398,38 @@ async function havingWateringR2(havingQuery, numEntries) {
         return [];
     })
 }
+// Nested aggregation for joined WateringR1 and WateringR2
+async function nestedAggregation(query) {
+    return await withOracleDB(async (connection) => {
+        const droppedTable = await connection.execute(
+            'drop view temp',
+        ).catch(async () => {
+            await connection.execute(
+                'create view temp(plantId, totalAmount) as select r2.plantId, sum(r1.amount) as totalAmount from WateringR2 r2, WateringR1 r1 where r2.wateringDate = r1.wateringDate and r2.temperature = r1.temperature and r2.pH = r1.pH group by r2.plantId'
+            );
+        });
+
+        if (droppedTable !== undefined) {
+            await connection.execute(
+                'create view temp(plantId, totalAmount) as select r2.plantId, sum(r1.amount) as totalAmount from WateringR2 r2, WateringR1 r1 where r2.wateringDate = r1.wateringDate and r2.temperature = r1.temperature and r2.pH = r1.pH group by r2.plantId'
+            );
+        }
+        
+        if(query == "min") {
+            const result = await connection.execute(
+                `select plantId, totalAmount from temp where totalAmount=(select min(totalAmount) from temp)`
+            );
+            return result.rows;
+        } else {
+            const result = await connection.execute(
+                `select plantId, totalAmount from temp where totalAmount=(select max(totalAmount) from temp)`
+            );
+            return result.rows;
+        }
+    }).catch(() => {
+        return null
+    })
+}
 
 /**
  * TEMPLATE RELATED FUNCTIONS
@@ -503,6 +535,7 @@ module.exports = {
     groupByWateringR2,
     havingWateringR2,
     fetchGardenProjFromDb,
+    nestedAggregation,
 
     /**
      * EXPORTED FUNCTIONS RELATED TO TEMPLATE PROJECT

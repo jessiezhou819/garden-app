@@ -134,6 +134,16 @@ router.post('/havingWateringR2', async (req, res) => {
     const havingResult = await appService.havingWateringR2(havingQuery, numEntries);
     res.json({ data: havingResult });
 });
+// Nested aggregation for joined WateringR1 and WateringR2
+router.post('/nestedaggregation', async(req, res) => {
+    const { query } = req.body;
+    const nestedaggregationResult = await appService.nestedAggregation(query);
+    if(nestedaggregationResult !== null) {
+        res.json({data: nestedaggregationResult, success: true});
+    } else {
+        res.status(500).json({success: false});
+    }
+});
 
 /**
  * ALL API ENDPOINTS REALTED TO THE PROJECT TEMPLATE
