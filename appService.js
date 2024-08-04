@@ -94,12 +94,39 @@ async function fetchHarvestFromDb() {
     });
 }
 
-async function filterHarvest(query) {
+async function filterHarvest(plantid, harvestid, qty, harvestDate, compare) {
     return await withOracleDB(async (connection) => {
+        const query = []
+        const bindVariables = []
+        
+        if (plantid) {
+            query.push('plantId=:plantid');
+            bindVariables.push(plantid);
+        } 
+        if (harvestid) {
+            query.push('harvestId=:harvestid');
+            bindVariables.push(harvestid);
+        }
+        if (qty) {
+            query.push('qty=:qty');
+            bindVariables.push(qty);
+        }
+        if(harvestDate && compare) {
+            const operator = compare === 'before' ? '<' : '>';
+            query.push(`harvestDate ${operator} TO_DATE(:harvestDate, 'YYYY-MM-DD')`);
+            bindVariables.push(harvestDate);
+        }
+
+        var execute;
+        if (query.length == 0) {
+            execute = `SELECT * FROM Harvest`
+        } else {
+            execute = `SELECT * FROM Harvest WHERE ${query.join(' AND ')}`;
+        }
 
         const result = await connection.execute(
-            query,
-            [],
+            execute,
+            bindVariables,
             { autoCommit: true }
         );
 

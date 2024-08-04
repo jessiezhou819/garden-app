@@ -26,8 +26,8 @@ router.get('/harvest', async (req, res) => {
 });
 
 router.post('/filter', async (req, res) => {
-    const { query } = req.body;
-    const filterResult = await appService.filterHarvest(query);
+    const { plantid, harvestid, qty, harvestDate, compare } = req.body;
+    const filterResult = await appService.filterHarvest(plantid, harvestid, qty, harvestDate, compare);
     if (filterResult !== null) {
         res.json({ data: filterResult, success: true });
     } else {
