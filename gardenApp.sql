@@ -1,6 +1,7 @@
--- check NOT NULL/Total Participation
--- check keys for the normalized relations
--- change attribute names  
+-- check not negative etc
+-- key constraints (many to many)
+-- UNIQUE constraints?
+-- add more data
 
 DROP TABLE FERTILIZER cascade constraints;
 DROP TABLE FLOWER cascade constraints;
@@ -26,9 +27,9 @@ CREATE TABLE HousePeople (
     username VARCHAR(20),
     pass VARCHAR(20) NOT NULL,
     fullName VARCHAR(20) NOT NULL,
-    gender VARCHAR(8),
+    gender VARCHAR(8) CHECK (gender IN ('M', 'F', 'Other')),
     gardenRole VARCHAR(20) NOT NULL,
-    yearsOfExp INT,
+    yearsOfExp INT CHECK (yearsOfExp >= 0),
     PRIMARY KEY(username)
 );
 
@@ -37,10 +38,13 @@ CREATE TABLE Garden (
     gardenName VARCHAR(20),
     loc VARCHAR(20) NOT NULL,
     soilType VARCHAR(20) NOT NULL,
-    gardenSize INT NOT NULL,
+    gardenSize INT NOT NULL CHECK (gardenSize > 0),
     PRIMARY KEY (gardenName, loc)
 );
 
+-- Assertion/Trigger is required here to ensure Total Participation (Many to Many) between
+-- 1. HousePeople and WorksOn
+-- 2. Garden and WorksOn
 CREATE TABLE WorksOn (
     username VARCHAR(20),
     gardenName VARCHAR(20),
@@ -50,8 +54,9 @@ CREATE TABLE WorksOn (
     FOREIGN KEY (gardenName, loc) REFERENCES Garden(gardenName, loc) ON DELETE CASCADE
 );
 
+
 CREATE TABLE Plants (
-    plantId INT,
+    plantId INT CHECK (plantId > 0),
     plantName VARCHAR(20) NOT NULL,
     wateringSchedule VARCHAR(8) NOT NULL,
     species VARCHAR(20),
@@ -62,7 +67,7 @@ CREATE TABLE Plants (
 );
 
 CREATE TABLE Flower (
-    plantId INT,
+    plantId INT CHECK (plantId > 0),
     color VARCHAR(20) NOT NULL,
     typeOfPlant VARCHAR(20) NOT NULL,
     PRIMARY KEY (plantId),
@@ -70,14 +75,14 @@ CREATE TABLE Flower (
 );
 
 CREATE TABLE Vegetable (
-    plantId INT,
+    plantId INT CHECK (plantId > 0),
     vitaminType CHAR(1) NOT NULL,
     PRIMARY KEY (plantId),
     FOREIGN KEY (plantId) REFERENCES Plants(plantId) ON DELETE CASCADE
 );
 
 CREATE TABLE Herb (
-    plantId INT,
+    plantId INT CHECK (plantId > 0),
     medicalUse VARCHAR(20) NOT NULL,
     PRIMARY KEY (plantId),
     FOREIGN KEY (plantId) REFERENCES Plants(plantId) ON DELETE CASCADE
@@ -98,7 +103,7 @@ CREATE TABLE ToolsR3 (
 );
 
 CREATE TABLE ToolsR4 (
-    serialNumber INT,
+    serialNumber INT CHECK (serialNumber > 0),
     toolName VARCHAR(20) NOT NULL,
     purchaseDate DATE NOT NULL,
     username VARCHAR(20),
@@ -108,8 +113,8 @@ CREATE TABLE ToolsR4 (
 );
 ----------------------------------------------------
 CREATE TABLE Supply (
-    plantId INT,
-    serialNumber INT,
+    plantId INT CHECK (plantId > 0),
+    serialNumber INT CHECK (serialNumber > 0),
     PRIMARY KEY (plantId, serialNumber),
     FOREIGN KEY (plantId) REFERENCES Plants(plantId) ON DELETE CASCADE,
     FOREIGN KEY (serialNumber) REFERENCES ToolsR4(serialNumber) ON DELETE CASCADE
@@ -117,18 +122,18 @@ CREATE TABLE Supply (
 -------------------- WATERING ---------------------
 CREATE TABLE WateringR1 (
     wateringDate DATE,
-    temperature FLOAT,
-    pH FLOAT,
-    amount INT NOT NULL,
+    temperature FLOAT CHECK (temperature BETWEEN -50 AND 50),
+    pH FLOAT CHECK (pH BETWEEN 0 and 14),
+    amount INT NOT NULL CHECK (amount > 0),
     PRIMARY KEY (wateringDate, temperature, pH)
 );
 
 CREATE TABLE WateringR2 (
-    wateringId INT,
+    wateringId INT CHECK (wateringId > 0),
     wateringDate DATE NOT NULL,
-    temperature FLOAT NOT NULL,
-    pH FLOAT NOT NULL,
-    plantId INT NOT NULL,
+    temperature FLOAT NOT NULL CHECK (temperature BETWEEN -50 AND 50),
+    pH FLOAT NOT NULL CHECK (pH BETWEEN 0 and 14),
+    plantId INT NOT NULL CHECK (plantId > 0),
     PRIMARY KEY (wateringId),
     FOREIGN KEY (wateringDate, temperature, pH) REFERENCES WateringR1(wateringDate, temperature, pH) ON DELETE CASCADE,
     FOREIGN KEY (plantId) REFERENCES Plants(plantId) ON DELETE CASCADE
@@ -139,15 +144,16 @@ CREATE TABLE Fertilizer (
     fertilizerName VARCHAR(20),
     manufacturer VARCHAR(20),
     fertilizerType VARCHAR(20) NOT NULL,
-    price INT NOT NULL,
+    price INT NOT NULL CHECK (price >= 0),
     PRIMARY KEY (fertilizerName, manufacturer)
 );
 
+-- Trigger/Assertion is require here to ensure Total Participation for Fertilizer in this Many to Many relationship
 CREATE TABLE PlantFertilized (
     fertilizerName VARCHAR(20),
     manufacturer VARCHAR(20),
-    plantId INT,
-    qty INT NOT NULL,
+    plantId INT CHECK (plantId > 0),
+    qty INT NOT NULL CHECK (qty > 0),
     applicationDate DATE NOT NULL,
     PRIMARY KEY (fertilizerName, manufacturer, plantId),
     FOREIGN KEY (fertilizerName, manufacturer) REFERENCES Fertilizer(fertilizerName, manufacturer) ON DELETE CASCADE,
@@ -169,8 +175,8 @@ CREATE TABLE PestR3 (
 );
 
 CREATE TABLE PestR4 (
-    pestId INT,
-    plantId INT NOT NULL,
+    pestId INT CHECK (pestId > 0),
+    plantId INT NOT NULL CHECK (plantId > 0),
     pestName VARCHAR(20) NOT NULL,
     PRIMARY KEY (pestId),
     FOREIGN KEY (plantId) REFERENCES Plants(plantId) ON DELETE CASCADE,
@@ -179,9 +185,9 @@ CREATE TABLE PestR4 (
 ----------------------------------------------------
 
 CREATE TABLE Harvest (
-    harvestId INT,
-    plantId INT,
-    qty INT,
+    harvestId INT CHECK (harvestId > 0),
+    plantId INT CHECK (plantId > 0),
+    qty INT CHECK (qty > 0),
     harvestDate DATE,
     PRIMARY KEY (harvestId, plantId),
     FOREIGN KEY (plantId) REFERENCES Plants(plantId) ON DELETE CASCADE
@@ -202,11 +208,15 @@ INSERT INTO Garden VALUES ('Herb Garden', 'Northwest', 'Clay', 200);
 INSERT INTO Garden VALUES ('Flower Garden', 'Northeast', 'Silty', 250);
 INSERT INTO Garden VALUES ('Tropical Garden', 'Center', 'Peaty', 300);
 INSERT INTO Garden Values ('Tree Garden', 'East', 'Silty', 500);
+INSERT INTO Garden Values ('Tree Garden', 'Center', 'Silty', 600);
 
 -- WorksOn
+INSERT INTO WorksOn VALUES ('user1', 'Flower Garden', 'Northeast');
 INSERT INTO WorksOn VALUES ('user1', 'Rose Garden', 'Southeast');
 INSERT INTO WorksOn VALUES ('user2', 'Vegetable Garden', 'Southwest');
 INSERT INTO WorksOn VALUES ('user3', 'Herb Garden', 'Northwest');
+INSERT INTO WorksOn VALUES ('user3', 'Tree Garden', 'East');
+INSERT INTO WorksOn VALUES ('user3', 'Vegetable Garden', 'Southwest');
 INSERT INTO WorksOn VALUES ('user4', 'Flower Garden', 'Northeast');
 INSERT INTO WorksOn VALUES ('user5', 'Tropical Garden', 'Center');
 INSERT INTO WorksOn VALUES ('user6', 'Tree Garden', 'East');
@@ -227,7 +237,7 @@ INSERT INTO Plants VALUES (12, 'Carrot', 'Weekly', 'Daucus', 'Vegetable Garden',
 INSERT INTO Plants VALUES (13, 'Thyme', 'Monthly', 'Thymus', 'Herb Garden', 'Northwest');
 INSERT INTO Plants VALUES (14, 'Orchid', 'Daily', 'Orchidaceae', 'Flower Garden', 'Northeast');
 INSERT INTO Plants VALUES (15, 'Papaya', 'Weekly', 'Carica', 'Tropical Garden', 'Center');
-INSERT INTO Plants VALUES (16, 'Ostrich Fern', 'Daily', 'Polypodiophyta', 'Tree Garden', 'Center');
+INSERT INTO Plants VALUES (16, 'Ostrich Fern', 'Daily', 'Polypodiophyta', 'Tree Garden', 'East');
 INSERT INTO Plants VALUES (17, 'Oak', 'Monthly', 'Quercus', 'Tree Garden', 'East');
 
 -- Flower (5 entries)
@@ -285,12 +295,22 @@ INSERT INTO WateringR1 VALUES (DATE '2023-05-01', 18.0, 6.8, 300);
 INSERT INTO WateringR1 VALUES (DATE '2023-06-01', 21.0, 7.0, 400);
 INSERT INTO WateringR1 VALUES (DATE '2023-07-01', 19.5, 6.7, 350);
 INSERT INTO WateringR1 VALUES (DATE '2023-08-01', 22.0, 6.9, 450);
+INSERT INTO WateringR1 VALUES (DATE '2023-09-01', 21.0, 6.5, 500);
+INSERT INTO WateringR1 VALUES (DATE '2023-10-01', 21.1, 7.0, 200);
+INSERT INTO WateringR1 VALUES (DATE '2023-11-01', 18.5, 6.9, 450);
+INSERT INTO WateringR1 VALUES (DATE '2023-12-01', 20.0, 6.7, 200);
+INSERT INTO WateringR1 VALUES (DATE '2024-01-01', 18.0, 7.0, 180);
 
 INSERT INTO WateringR2 VALUES (1, DATE '2023-04-01', 20.5, 6.5, 1);
 INSERT INTO WateringR2 VALUES (2, DATE '2023-05-01', 18.0, 6.8, 2);
 INSERT INTO WateringR2 VALUES (3, DATE '2023-06-01', 21.0, 7.0, 3);
 INSERT INTO WateringR2 VALUES (4, DATE '2023-07-01', 19.5, 6.7, 4);
 INSERT INTO WateringR2 VALUES (5, DATE '2023-08-01', 22.0, 6.9, 5);
+INSERT INTO WateringR2 VALUES (6, DATE '2023-09-01', 21.0, 6.5, 1);
+INSERT INTO WateringR2 VALUES (7, DATE '2023-10-01', 21.1, 7.0, 3);
+INSERT INTO WateringR2 VALUES (8, DATE '2023-11-01', 18.5, 6.9, 2);
+INSERT INTO WateringR2 VALUES (9, DATE '2023-12-01', 20.0, 6.7, 4);
+INSERT INTO WateringR2 VALUES (10, DATE '2024-01-01', 18.0, 7.0, 2);
 
 -- Fertilizer
 INSERT INTO Fertilizer VALUES ('Compost', 'GreenGrow', 'Organic', 20);
@@ -330,4 +350,7 @@ INSERT INTO Harvest VALUES (2, 3, 5, DATE '2023-07-01');
 INSERT INTO Harvest VALUES (3, 1, 7, DATE '2023-08-01');
 INSERT INTO Harvest VALUES (4, 4, 8, DATE '2023-09-01');
 INSERT INTO Harvest VALUES (5, 5, 12, DATE '2023-10-01');
-INSERT INTO Harvest VALUES (6, 5, 10, DATE '2024-05-01');
+INSERT INTO Harvest VALUES (6, 4, 10, DATE '2024-02-01');
+INSERT INTO Harvest VALUES (7, 5, 10, DATE '2024-05-01');
+INSERT INTO Harvest VALUES (8, 2, 15, DATE '2024-06-01');
+INSERT INTO Harvest VALUES (9, 1, 8, DATE '2024-08-01');
