@@ -85,7 +85,6 @@ async function fetchHousePeopleFromDb() {
     });
 }
 
-<<<<<<< HEAD
 async function fetchPlantsFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute('SELECT * FROM Plants');
@@ -96,8 +95,6 @@ async function fetchPlantsFromDb() {
 }
 
 
-=======
->>>>>>> 4a62b959e29e135c94463469385a27666fe14534
 async function fetchHarvestFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute('SELECT * FROM Harvest');
