@@ -230,7 +230,7 @@ async function findDivision(username) {
 async function fetchWateringFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute(
-            `select r2.wateringId, r2.pH, r2.temperature, r2.wateringDate, r1.amount, r2.plantId from WateringR2 r2 inner join WateringR1 r1 on r2.wateringDate = r1.wateringDate and r2.temperature = r1.temperature and r2.pH = r1.pH`
+            `select r2.wateringId, r2.pH, r2.temperature, r2.wateringDate, r1.amount, r2.plantId from WateringR2 r2, WateringR1 r1 where r2.wateringDate = r1.wateringDate and r2.temperature = r1.temperature and r2.pH = r1.pH`
         );
         return result.rows;
     }).catch(() => {
