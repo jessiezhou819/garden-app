@@ -20,6 +20,11 @@ router.get('/housepeople', async (req, res) => {
     res.json({ data: tableContent });
 });
 
+router.get('/plant', async (req, res) => {
+    const tableContent = await appService.fetchPlantsFromDb();
+    res.json({ data: tableContent });
+})
+
 router.get('/harvest', async (req, res) => {
     const tableContent = await appService.fetchHarvestFromDb();
     res.json({ data: tableContent });

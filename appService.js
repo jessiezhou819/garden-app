@@ -85,6 +85,16 @@ async function fetchHousePeopleFromDb() {
     });
 }
 
+async function fetchPlantsFromDb() {
+    return await withOracleDB(async (connection) => {
+        const result = await connection.execute('SELECT * FROM Plants');
+        return result.rows;
+    }).catch(() => {
+        return [];
+    });
+}
+
+
 async function fetchHarvestFromDb() {
     return await withOracleDB(async (connection) => {
         const result = await connection.execute('SELECT * FROM Harvest');
@@ -441,8 +451,8 @@ async function nestedAggregation(query) {
                 'create view temp(plantId, totalAmount) as select r2.plantId, sum(r1.amount) as totalAmount from WateringR2 r2, WateringR1 r1 where r2.wateringDate = r1.wateringDate and r2.temperature = r1.temperature and r2.pH = r1.pH group by r2.plantId'
             );
         }
-        
-        if(query == "min") {
+
+        if (query == "min") {
             const result = await connection.execute(
                 `select plantId, totalAmount from temp where totalAmount=(select min(totalAmount) from temp)`
             );
@@ -465,6 +475,7 @@ module.exports = {
      * EXPORTED FUNCTIONS RELATED TO GARDEN APP PROJECT
      */
     fetchHousePeopleFromDb,
+    fetchPlantsFromDb,
     fetchGardenFromDb,
     fetchWorksOnFromDb,
     fetchHarvestFromDb,
