@@ -32,33 +32,18 @@ async function filterHarvest(event) {
     const compare = document.getElementById('comparison').value;
     const harvestDate = document.getElementById('harvestDate').value;
 
-    let whereClause = [];
-
-    if (plantid) {
-        whereClause.push(`plantId = ${plantid}`);
-    }
-
-    if (harvestid) {
-        whereClause.push(`harvestId = ${harvestid}`);
-    }
-
-    if (qty) {
-        whereClause.push(`qty = ${qty}`);
-    }
-
-    if (harvestDate && compare) {
-        const operator = compare === 'before' ? '<' : '>';
-        whereClause.push(`harvestDate ${operator} TO_DATE('${harvestDate}', 'YYYY-MM-DD')`);
-    }
-
-    const query = `SELECT * FROM Harvest${whereClause.length ? ' WHERE ' + whereClause.join(' AND ') : ''}`;
-
     const response = await fetch('/filter', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ query })
+        body: JSON.stringify({ 
+            plantid: plantid,
+            harvestid: harvestid,
+            qty: qty,
+            compare: compare,
+            harvestDate: harvestDate
+         })
     })
 
     const responseData = await response.json();
@@ -84,7 +69,7 @@ async function filterHarvest(event) {
             });
         });
     } else {
-        messageElement.textContent = "Error finding data!";
+        messageElement.textContent = "Data not found!";
     }
 
 }
