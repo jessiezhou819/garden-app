@@ -78,7 +78,7 @@ async function fetchAndDisplayDivision(event) {
 
         messageElement.textContent = "";
         var alertDiv = document.createElement("div");
-        alertDiv.className = "alert alert-success";
+        alertDiv.className = "alert alert-success col-4";
         alertDiv.setAttribute("role", "alert");
         alertDiv.textContent = "Found User!";
         messageElement.appendChild(alertDiv);
@@ -97,7 +97,7 @@ async function fetchAndDisplayDivision(event) {
 
         messageElement.textContent = "";
         var alertDiv = document.createElement("div");
-        alertDiv.className = "alert alert-danger";
+        alertDiv.className = "alert alert-danger col-4";
         alertDiv.setAttribute("role", "alert");
         alertDiv.textContent = "Error finding data!";
         messageElement.appendChild(alertDiv);

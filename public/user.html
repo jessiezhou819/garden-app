@@ -62,13 +62,25 @@
         </table>
 
         <h3 class="my-4">Select a User (Division)</h3>
-        <form id="selectUser" class="mb-4">
+        <!-- <form id="selectUser" class="mb-4">
             <div class="mb-3">
                 <label for="inputUsername" class="form-label">Username</label>
                 <input type="text" class="form-control" id="inputUsername" placeholder="Enter username" required>
             </div>
             <button type="submit" class="btn btn-primary">Search</button>
+        </form> -->
+        <form id="selectUser" class="row g-3 align-items-center mb-4">
+            <div class="col-auto">
+                <label for="inputUsername" class="form-label mb-0">Username:</label>
+            </div>
+            <div class="col-auto">
+                <input type="text" class="form-control" id="inputUsername" placeholder="Enter username" required>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
         </form>
+        
         <div id="divisionMsg"></div>
 
         <h3 class="text-center my-4">Garden Working On</h3>
