@@ -69,7 +69,7 @@ async function filterHarvest(event) {
             });
         });
     } else {
-        messageElement.textContent = "Error finding data!";
+        messageElement.textContent = "Data not found!";
     }
 
 }

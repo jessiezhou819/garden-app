@@ -67,12 +67,21 @@ async function fetchAndDisplayDivision(event) {
     const tableElement = document.getElementById('divisiontable');
     const tableBody = tableElement.querySelector('tbody');
 
+    const warningElement = document.getElementById('warning');
+    const warnBody = tableElement.querySelector('p');
+
     if (tableBody) {
         tableBody.innerHTML = '';
     }
 
     if (responseData.success) {
-        messageElement.textContent = "Found User!";
+
+        messageElement.textContent = "";
+        var alertDiv = document.createElement("div");
+        alertDiv.className = "alert alert-success";
+        alertDiv.setAttribute("role", "alert");
+        alertDiv.textContent = "Found User!";
+        messageElement.appendChild(alertDiv);
 
         const divisionContent = responseData.data;
 
@@ -85,6 +94,14 @@ async function fetchAndDisplayDivision(event) {
         });
     } else {
         messageElement.textContent = "Error finding data!";
+
+        messageElement.textContent = "";
+        var alertDiv = document.createElement("div");
+        alertDiv.className = "alert alert-danger";
+        alertDiv.setAttribute("role", "alert");
+        alertDiv.textContent = "Error finding data!";
+        messageElement.appendChild(alertDiv);
+
     }
 }
 
