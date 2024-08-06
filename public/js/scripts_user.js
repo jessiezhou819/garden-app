@@ -67,9 +67,6 @@ async function fetchAndDisplayDivision(event) {
     const tableElement = document.getElementById('divisiontable');
     const tableBody = tableElement.querySelector('tbody');
 
-    const warningElement = document.getElementById('warning');
-    const warnBody = tableElement.querySelector('p');
-
     if (tableBody) {
         tableBody.innerHTML = '';
     }
@@ -93,7 +90,6 @@ async function fetchAndDisplayDivision(event) {
             });
         });
     } else {
-        messageElement.textContent = "Error finding data!";
 
         messageElement.textContent = "";
         var alertDiv = document.createElement("div");

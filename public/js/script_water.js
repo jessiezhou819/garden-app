@@ -103,10 +103,21 @@ async function insertWatering(event) {
     const messageElement = document.getElementById('insertWateringResultMsg');
 
     if (responseData.success) {
-        messageElement.textContent = "Data inserted successfully!";
+        
+        messageElement.textContent = "";
+        var alertDiv = document.createElement("div");
+        alertDiv.className = "alert alert-success col-6";
+        alertDiv.setAttribute("role", "alert");
+        alertDiv.textContent = "Data inserted successfully!";
+        messageElement.appendChild(alertDiv);
         fetchTableData();
     } else {
-        messageElement.textContent = "Error inserting data!";
+        messageElement.textContent = "";
+        var alertDiv = document.createElement("div");
+        alertDiv.className = "alert alert-danger col-6";
+        alertDiv.setAttribute("role", "alert");
+        alertDiv.textContent = "Error inserting data!";
+        messageElement.appendChild(alertDiv);
     }
 }
 // Delete watering entry through cascading of WateringR1 table
@@ -133,10 +144,20 @@ async function deleteWatering(event) {
     const messageElement = document.getElementById('deleteWateringR1ResultMsg');
 
     if (responseData.success) {
-        messageElement.textContent = "Data deleted successfully!";
+        messageElement.textContent = "";
+        var alertDiv = document.createElement("div");
+        alertDiv.className = "alert alert-success col-6";
+        alertDiv.setAttribute("role", "alert");
+        alertDiv.textContent = "Data deleted successfully!";
+        messageElement.appendChild(alertDiv);
         fetchTableData();
     } else {
-        messageElement.textContent = "Error deleting data!";
+        messageElement.textContent = "";
+        var alertDiv = document.createElement("div");
+        alertDiv.className = "alert alert-danger col-6";
+        alertDiv.setAttribute("role", "alert");
+        alertDiv.textContent = "Error deleting data!";
+        messageElement.appendChild(alertDiv);
     }
 }
 // Update WateringR2 entry
@@ -167,10 +188,20 @@ async function updateWateringR2(event) {
     const messageElement = document.getElementById('updateWateringR2ResultMsg');
 
     if (responseData.success) {
-        messageElement.textContent = "Data updated successfully!";
+        messageElement.textContent = "";
+        var alertDiv = document.createElement("div");
+        alertDiv.className = "alert alert-success col-6";
+        alertDiv.setAttribute("role", "alert");
+        alertDiv.textContent = "Data updated successfully!";
+        messageElement.appendChild(alertDiv);
         fetchTableData();
     } else {
-        messageElement.textContent = "Error updating data!";
+        messageElement.textContent = "";
+        var alertDiv = document.createElement("div");
+        alertDiv.className = "alert alert-danger col-6";
+        alertDiv.setAttribute("role", "alert");
+        alertDiv.textContent = "Error updating data!";
+        messageElement.appendChild(alertDiv);
     }
 }
 // GroupBy on WateringR2 entry
@@ -270,7 +301,12 @@ async function nestedAggregation(event) {
     }
 
     if (responseData.success) {
-        messageElement.textContent = "Successful data aggregation!";
+        messageElement.textContent = "";
+        var alertDiv = document.createElement("div");
+        alertDiv.className = "alert alert-success col-6 ";
+        alertDiv.setAttribute("role", "alert");
+        alertDiv.textContent = "Successful data aggregation!";
+        messageElement.appendChild(alertDiv);
 
         const nestedaggregationContent = responseData.data;
 
@@ -283,6 +319,12 @@ async function nestedAggregation(event) {
         });
     } else {
         messageElement.textContent = "Error aggregating data!";
+        messageElement.textContent = "";
+        var alertDiv = document.createElement("div");
+        alertDiv.className = "alert alert-danger col-6";
+        alertDiv.setAttribute("role", "alert");
+        alertDiv.textContent = "Error aggregating data!";
+        messageElement.appendChild(alertDiv);
     }
 }
 
