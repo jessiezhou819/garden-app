@@ -73,9 +73,8 @@
             <h1 class="display-3 text-white mb-4 animated slideInDown">Water</h1>
             <nav aria-label="breadcrumb animated slideInDown">
                 <ol class="breadcrumb justify-content-center mb-0">
-                    <li class="breadcrumb-item">Vegetable</li>
-                    <li class="breadcrumb-item">Flower</li>
-                    <li class="breadcrumb-item">Herbs</li>
+                    <li class="breadcrumb-item">Records</li>
+                    <li class="breadcrumb-item">Summaries</li>
                 </ol>
             </nav>
         </div>
@@ -177,7 +176,7 @@
         </div>
 
         <div class="row justify-content-evenly flex-wrap mb-4">
-            <div class="col-md-6 mb-4">
+            <div class="col-md-12 mb-6 border p-3"> 
                 <h2>Watering R1 and R2 Joined Entries</h2>
                 <table id="watering" class="table table-hover">
                     <thead>
@@ -194,7 +193,10 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-md-6 mb-4">
+        </div>
+
+        <div class="row justify-content-evenly flex-wrap mb-4">
+            <div class="col-md-6 mb-4 border p-3">
                 <h2>Watering R1 Entries</h2>
                 <table id="wateringR1" class="table table-hover">
                     <thead>
@@ -209,10 +211,7 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-
-        <div class="row justify-content-evenly flex-wrap mb-4">
-            <div class="col-md-6 mb-4">
+            <div class="col-md-6 mb-4 border p-3">
                 <h2>Watering R2 Entries</h2>
                 <table id="wateringR2" class="table table-hover">
                     <thead>
@@ -228,8 +227,14 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-md-6 mb-4">
+        
+        </div>
+
+        <div class="row justify-content-evenly flex-wrap mb-4">
+
+            <div class="col-md-4 mb-2">
                 <h2>Watering R2 Aggregation GroupBy using COUNT()</h2>
+                <p># of Watering Entries for each Plant</p>
                 <form id="groupbywateringR2" class="mb-3">
                     <div class="mb-3">
                         <label for="orderwateringR2" class="form-label">order by:</label>
@@ -252,10 +257,8 @@
                     </tbody>
                 </table>
             </div>
-        </div>
 
-        <div class="row justify-content-evenly flex-wrap mb-4">
-            <div class="col-md-6 mb-4">
+            <div class="col-md-4 mb-2">
                 <h2>Watering R2 Aggregation Having using COUNT()</h2>
                 <form id="havingwateringR2Form" class="mb-3">
                     <div class="mb-3">
@@ -284,7 +287,8 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-md-6 mb-4">
+
+            <div class="col-md-4 mb-2">
                 <h2>Watering R1 and R2 Nested Aggregation</h2>
                 <form id="nestedaggregation" class="mb-3">
                     <div class="mb-3">
