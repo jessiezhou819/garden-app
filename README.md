@@ -36,3 +36,7 @@ will provide users the ability to view and update data accordingly on the applic
 
 ## ER Diagram
 ![](./assets/CPSC_304_Milstone_1_ERD.png)
+
+## Milestone 4 PDF
+Please refer to ./assets/CPSC304_Group36_Milestone4.pdf of this repository to view the milestone information
+![](./assets/CPSC304_Group36_Milestone4.pdf)
