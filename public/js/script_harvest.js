@@ -57,7 +57,12 @@ async function filterHarvest(event) {
     }
 
     if (responseData.success) {
-        messageElement.textContent = "Found Record!";
+        messageElement.textContent = "";
+        var alertDiv = document.createElement("div");
+        alertDiv.className = "alert alert-success col-4";
+        alertDiv.setAttribute("role", "alert");
+        alertDiv.textContent = "Found Record!";
+        messageElement.appendChild(alertDiv);
 
         const filterContent = responseData.data;
 
@@ -69,7 +74,12 @@ async function filterHarvest(event) {
             });
         });
     } else {
-        messageElement.textContent = "Data not found!";
+        messageElement.textContent = "";
+        var alertDiv = document.createElement("div");
+        alertDiv.className = "alert alert-danger col-4";
+        alertDiv.setAttribute("role", "alert");
+        alertDiv.textContent = "Data not found!";
+        messageElement.appendChild(alertDiv);
     }
 
 }
