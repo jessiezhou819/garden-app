@@ -114,7 +114,7 @@
 }
 
 @media (max-width: 991.98px) {
-    .navbar .navbar-nav .nav-link  {
+    .navbar .navbar-nav .nav-link {
         margin-right: 0;
         padding: 10px 0;
     }
@@ -175,7 +175,7 @@
         position: relative;
         min-height: 450px;
     }
-    
+
     #header-carousel .carousel-item img {
         position: absolute;
         width: 100%;
@@ -240,112 +240,6 @@
     left: 0;
 }
 
-
-/*** About ***/
-.about-experience {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    right: -45px;
-    bottom: -45px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-
-/*** Service ***/
-.service-item {
-    position: relative;
-    border-radius: 8px;
-    box-shadow: 0 0 45px rgba(0, 0, 0, .07);
-}
-
-.service-item .service-img {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    border-radius: 8px;
-    overflow: hidden;
-    z-index: -1;
-}
-
-.service-item .service-img img {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    object-fit: cover;
-    border-radius: 10px;
-}
-
-.service-item .service-img::before {
-    position: absolute;
-    content: "";
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background: rgba(0, 0, 0, .5);
-    border-radius: 10px;
-    z-index: 1;
-}
-
-.service-item .service-img::after {
-    position: absolute;
-    content: "";
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background: #FFFFFF;
-    transition: .5s ease-out;
-    z-index: 2;
-}
-
-.service-item:hover .service-img::after {
-    width: 0;
-    left: auto;
-    right: 0;
-}
-
-.service-item .service-text .service-icon {
-    width: 140px;
-    height: 140px;
-    padding: 15px;
-    margin-top: -70px;
-    margin-bottom: 40px;
-    background: #FFFFFF;
-    border-radius: 140px;
-    overflow: hidden;
-    box-shadow: 0 0 60px rgba(0, 0, 0, .1);
-}
-
-.service-item .service-text h5,
-.service-item .service-text p {
-    transition: .5s;
-}
-
-.service-item:hover .service-text h5,
-.service-item:hover .service-text p {
-    color: #FFFFFF;
-}
-
-.service-item .service-text .btn {
-    color: var(--secondary);
-    background: #FFFFFF;
-    box-shadow: 0 0 45px rgba(0, 0, 0, .25);
-}
-
-.service-item .service-text .btn:hover {
-    color: var(--dark);
-    background: var(--secondary);
-}
-
-
 /*** Product ***/
 .product-item {
     position: relative;
@@ -373,21 +267,6 @@
     opacity: 1;
     padding-top: 0;
 }
-
-
-/*** Team ***/
-.team-item {
-    position: relative;
-    text-align: center;
-    border-radius: 8px;
-    box-shadow: 0 0 45px rgba(0, 0, 0, .07);
-}
-
-.team-item .btn {
-    border-color: transparent;
-    box-shadow: 0 0 45px rgba(0, 0, 0, .2);
-}
-
 
 /*** Testimonial ***/
 .testimonial-img {
