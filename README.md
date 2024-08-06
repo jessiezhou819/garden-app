@@ -10,6 +10,10 @@ Our project is a gardening app that provides users within a household the abilit
 crops effectively and effectively by providing a centralized UI that displays garden and plant data. Additionally, our app
 will provide users the ability to view and update data accordingly on the application.
 
+## Milestone 4 PDF
+Please refer to ./assets/CPSC304_Group36_Milestone4.pdf of this repository to view the milestone information
+![](./assets/CPSC304_Group36_Milestone4.pdf)
+
 ## Timeline
 - Create skeleton for front end (FE) [Jessie, Poppy]
    - Create tables that render data/rows from the backend
@@ -36,7 +40,3 @@ will provide users the ability to view and update data accordingly on the applic
 
 ## ER Diagram
 ![](./assets/CPSC_304_Milstone_1_ERD.png)
-
-## Milestone 4 PDF
-Please refer to ./assets/CPSC304_Group36_Milestone4.pdf of this repository to view the milestone information
-![](./assets/CPSC304_Group36_Milestone4.pdf)
