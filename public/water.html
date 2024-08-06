@@ -85,6 +85,11 @@
         <div class="row justify-content-evenly flex-wrap mb-4">
             <div class="col-md-4 mb-4">
                 <h4> Insert Value into Watering </h4>
+                <p>
+                    For insertion, you must input a new wateringId that does not exist in WateringR2. Additionally,
+                    you must enter a unique {pH, temperature, and wateringDate} combination that does not already
+                    exist in WateringR1. Lastly, for plantId, it must be a plantId that exists in the plant table.
+                </p>
                 <form id="insertWatering">
                     <div class="mb-3">
                         <label for="insertwateringId" class="form-label">wateringId:</label>
@@ -122,6 +127,10 @@
 
             <div class="col-md-4 mb-4">
                 <h4> Delete Value from Watering R1 </h4>
+                <p>
+                    For deletion, you must enter a combination tuple for {wateringDate, temperature, pH} that exists in
+                    the WateringR1 table.
+                </p>
                 <form id="deleteWateringR1">
                     <div class="mb-3">
                         <label for="deletewateringDate" class="form-label">wateringDate:</label>
@@ -145,6 +154,11 @@
 
             <div class="col-md-4 mb-4">
                 <h4> Update Tuple in Watering R2 </h4>
+                <p>
+                    For updating, you must enter a wateringId that exists in the wateringR2 table. Additionally, for the 
+                    {wateringDate, temperature, pH} tuple combination, it must be a tuple that exists in the WateringR1 
+                    when updating. For the plantId, it must be a plantId that exists in the plant table.
+                </p>
                 <form id="updateWateringR2">
                     <div class="mb-3">
                         <label for="updatewateringId" class="form-label">wateringId:</label>
