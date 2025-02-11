@@ -5,11 +5,13 @@ Welcome to the **Garden App**, a personal project designed to help households ef
 ---
 
 ## 🚀 Project Overview
-The Garden App empowers users to:
-- **Maintain** and organize multiple garden plots
-- **Monitor** plant health and growth status
-- **Manage** tasks like watering schedules, harvesting times, and crop rotations
-- **Update** real-time data seamlessly through a user-friendly UI
+The **Garden App** is designed to simplify garden management, making it efficient and enjoyable for users. Key features include:
+
+- 🌿 **Organize** and maintain multiple garden plots, including plants, flowers, and vegetables
+- 🐛 **Monitor** pest activity to ensure healthy crop growth
+- 🔧 **Track** tool usage, inventory, and gardening supplies for efficient resource management
+- 💧 **Manage** essential tasks such as watering schedules, harvesting timelines, and crop rotation planning
+- 📊 **Update** and access real-time data seamlessly through an intuitive, user-friendly interface
 
 Whether you're a hobbyist gardener or managing a shared household garden, this app makes plant care collaborative and efficient.
 
@@ -39,15 +41,6 @@ Whether you're a hobbyist gardener or managing a shared household garden, this a
 
 ---
 
-## ⚡ Challenges & To-Do List
-- Set up the initial project structure with provided templates
-- Connect the backend server to the database
-- Establish reliable communication between frontend and backend
-- Implement advanced features beyond basic CRUD operations
-- Finalize UI styling and user experience improvements
-
----
-
 ## 📊 Visuals
 
 ### **Frontend Wireframe**
@@ -62,7 +55,7 @@ Whether you're a hobbyist gardener or managing a shared household garden, this a
 ---
 
 ## 💡 Technologies Used
-- **Frontend:** HTML, CSS, JavaScript, Bootstrap
+- **Frontend:** HTML, CSS, JavaScript
 - **Backend:** Node.js, Express
 - **Database:** Oracle Database
 
