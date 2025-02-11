@@ -55,7 +55,7 @@ Whether you're a hobbyist gardener or managing a shared household garden, this a
 ---
 
 ## 💡 Technologies Used
-- **Frontend:** HTML, CSS, JavaScript
+- **Frontend:** HTML, CSS, JavaScript, Bootstrap
 - **Backend:** Node.js, Express
 - **Database:** Oracle Database
 
